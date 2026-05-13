@@ -1,0 +1,417 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { withBase } from '../../../lib/path';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('albums');
+  const paths: Array<{ params: { slug: string; idx: string }; props: any }> = [];
+  for (const album of albums) {
+    album.data.songs.forEach((song, idx) => {
+      paths.push({
+        params: { slug: album.id, idx: String(idx) },
+        props: { album: album.data, albumId: album.id, song, songIdx: idx },
+      });
+    });
+  }
+  return paths;
+}
+
+const { album, albumId, song, songIdx } = Astro.props;
+const lrcFilename = song.lrc.split('/').pop()!;
+const audioUrl = withBase(song.audio);
+const lrcUrl = withBase(song.lrc);
+---
+
+<BaseLayout title={`🎛 ${song.title} · Tune`}>
+  <article
+    class="max-w-5xl mx-auto"
+    data-slug={albumId}
+    data-lrc-url={lrcUrl}
+    data-audio-url={audioUrl}
+    data-lrc-filename={lrcFilename}
+    data-title={song.title}
+    data-artist={album.artist}
+    id="tuner-root"
+  >
+    <header class="mb-6 flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <a href={withBase('/tune/')} class="text-xs text-ochre/70 hover:text-candle font-mono tracking-widest">← ALL TUNERS</a>
+        <h1 class="font-display text-2xl md:text-3xl text-goldleaf mt-2">{song.title}</h1>
+        <p class="text-sm text-parchment/60 italic">{album.title} · {album.artist}</p>
+      </div>
+      <div class="flex gap-2">
+        <button id="btn-tap-mode" class="px-4 py-2 border border-brass text-candle font-mono text-sm hover:bg-candle/10">
+          TAP MODE: OFF
+        </button>
+        <button id="btn-save" class="px-4 py-2 bg-candle text-ink font-mono text-sm hover:bg-goldleaf">
+          💾 SAVE LRC
+        </button>
+      </div>
+    </header>
+
+    <section class="bg-black/30 border border-brass/30 p-4 mb-4 sticky top-[64px] z-10 backdrop-blur">
+      <audio id="tuner-audio" controls preload="metadata" class="w-full"></audio>
+      <div class="flex gap-2 flex-wrap items-center mt-3 text-xs font-mono text-parchment/60">
+        <kbd class="bg-black/40 px-1.5 py-0.5 rounded border border-brass/30">SPACE</kbd> 播放/暂停
+        <kbd class="bg-black/40 px-1.5 py-0.5 rounded border border-brass/30">←/→</kbd> ±2s
+        <kbd class="bg-black/40 px-1.5 py-0.5 rounded border border-brass/30">SHIFT+←/→</kbd> ±5s
+        <kbd class="bg-black/40 px-1.5 py-0.5 rounded border border-brass/30">T</kbd> Tap (标记当前行 + 跳到下一行)
+        <kbd class="bg-black/40 px-1.5 py-0.5 rounded border border-brass/30">Z</kbd> 撤销上一个 Tap
+        <span id="tuner-status" class="ml-auto text-candle"></span>
+      </div>
+    </section>
+
+    <section id="lines-host" class="space-y-0 border border-brass/20"></section>
+  </article>
+
+  <style is:global>
+    .line-row {
+      display: grid;
+      grid-template-columns: 92px 56px 1fr 64px;
+      gap: 12px;
+      align-items: center;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(141, 110, 58, 0.12);
+      transition: background 100ms;
+    }
+    .line-row:last-child {
+      border-bottom: none;
+    }
+    .line-row.is-active {
+      background: rgba(244, 214, 138, 0.08);
+    }
+    .line-row.is-pending {
+      background: rgba(122, 43, 43, 0.12);
+    }
+    .line-ts {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(141, 110, 58, 0.4);
+      color: #f4d68a;
+      padding: 4px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      width: 86px;
+      text-align: center;
+    }
+    .line-ts:focus {
+      outline: none;
+      border-color: #c9a35a;
+    }
+    .line-set {
+      background: transparent;
+      border: 1px solid rgba(141, 110, 58, 0.4);
+      color: #c9a35a;
+      padding: 4px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .line-set:hover {
+      background: #c9a35a;
+      color: #0b0a08;
+    }
+    .line-text {
+      cursor: pointer;
+    }
+    .line-en {
+      font-family: 'EB Garamond', serif;
+      font-size: 16px;
+      color: #e6dcc6;
+      line-height: 1.4;
+    }
+    .line-cn {
+      font-family: 'EB Garamond', 'PingFang SC', 'Songti SC', serif;
+      font-size: 13px;
+      color: rgba(230, 220, 198, 0.6);
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+    .line-row.is-active .line-en {
+      color: #fff;
+      font-weight: 600;
+    }
+    .line-row.is-active .line-cn {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .line-seek {
+      background: transparent;
+      border: 1px solid rgba(141, 110, 58, 0.4);
+      color: rgba(230, 220, 198, 0.7);
+      padding: 4px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .line-seek:hover {
+      background: rgba(244, 214, 138, 0.1);
+      color: #f4d68a;
+    }
+  </style>
+
+  <script>
+    type Line = { t: number; en: string; cn: string };
+
+    function parseLrc(text: string): Line[] {
+      const out: Line[] = [];
+      const re = /\[(\d{1,2}):(\d{1,2}(?:\.\d+)?)\](.*)/;
+      for (const raw of text.split(/\r?\n/)) {
+        const m = raw.match(re);
+        if (!m) continue;
+        const mm = parseInt(m[1]!, 10);
+        const ss = parseFloat(m[2]!);
+        const body = m[3]!.trim();
+        const sepIdx = body.indexOf('||');
+        const en = sepIdx >= 0 ? body.slice(0, sepIdx).trim() : body;
+        const cn = sepIdx >= 0 ? body.slice(sepIdx + 2).trim() : '';
+        out.push({ t: mm * 60 + ss, en, cn });
+      }
+      return out.sort((a, b) => a.t - b.t);
+    }
+
+    function fmtTs(t: number): string {
+      if (!isFinite(t) || t < 0) t = 0;
+      const mm = Math.floor(t / 60);
+      const ss = t - mm * 60;
+      return `${String(mm).padStart(2, '0')}:${ss.toFixed(2).padStart(5, '0')}`;
+    }
+
+    function parseTsInput(s: string): number | null {
+      const m = s.trim().match(/^(\d{1,2}):(\d{1,2}(?:\.\d+)?)$/);
+      if (!m) return null;
+      const mm = parseInt(m[1]!, 10);
+      const ss = parseFloat(m[2]!);
+      if (!isFinite(mm) || !isFinite(ss)) return null;
+      return mm * 60 + ss;
+    }
+
+    function buildLrc(title: string, artist: string, lines: Line[]): string {
+      const out = [`[ti:${title}]`, `[ar:${artist}]`];
+      for (const line of lines.slice().sort((a, b) => a.t - b.t)) {
+        const ts = `[${fmtTs(line.t)}]`;
+        const body = line.cn ? `${line.en}||${line.cn}` : line.en;
+        out.push(`${ts}${body}`);
+      }
+      return out.join('\n') + '\n';
+    }
+
+    const root = document.getElementById('tuner-root') as HTMLElement;
+    if (!root) throw new Error('no tuner root');
+
+    const lrcUrl = root.dataset.lrcUrl!;
+    const audioUrl = root.dataset.audioUrl!;
+    const slug = root.dataset.slug!;
+    const lrcFilename = root.dataset.lrcFilename!;
+    const title = root.dataset.title!;
+    const artist = root.dataset.artist!;
+
+    const audio = document.getElementById('tuner-audio') as HTMLAudioElement;
+    const linesHost = document.getElementById('lines-host')!;
+    const statusEl = document.getElementById('tuner-status')!;
+    const btnSave = document.getElementById('btn-save')!;
+    const btnTap = document.getElementById('btn-tap-mode')!;
+
+    audio.src = audioUrl;
+
+    let lines: Line[] = [];
+    let tapMode = false;
+    let pendingIdx = 0; // next line to be tapped in tap mode
+    let lastTapUndoIdx = -1;
+    let lastTapPrevT = 0;
+    let dirty = false;
+
+    function setStatus(msg: string) {
+      statusEl.textContent = msg;
+      if (msg) setTimeout(() => { if (statusEl.textContent === msg) statusEl.textContent = ''; }, 2400);
+    }
+
+    function setDirty(d: boolean) {
+      dirty = d;
+      (btnSave as HTMLButtonElement).textContent = d ? '💾 SAVE LRC *' : '💾 SAVE LRC';
+    }
+
+    function render() {
+      linesHost.innerHTML = '';
+      lines.forEach((line, i) => {
+        const row = document.createElement('div');
+        row.className = 'line-row';
+        row.dataset.idx = String(i);
+
+        const tsInput = document.createElement('input');
+        tsInput.type = 'text';
+        tsInput.className = 'line-ts';
+        tsInput.value = fmtTs(line.t);
+        tsInput.addEventListener('change', () => {
+          const v = parseTsInput(tsInput.value);
+          if (v == null) {
+            tsInput.value = fmtTs(line.t);
+            setStatus('格式错误,请用 mm:ss.xx');
+            return;
+          }
+          line.t = v;
+          setDirty(true);
+        });
+        tsInput.addEventListener('focus', () => { tsInput.select(); });
+
+        const btnSet = document.createElement('button');
+        btnSet.className = 'line-set';
+        btnSet.textContent = '⊕ NOW';
+        btnSet.title = '把这一行的时间戳设为当前播放时刻';
+        btnSet.addEventListener('click', () => {
+          line.t = audio.currentTime;
+          tsInput.value = fmtTs(line.t);
+          setDirty(true);
+        });
+
+        const txt = document.createElement('div');
+        txt.className = 'line-text';
+        const en = document.createElement('div');
+        en.className = 'line-en';
+        en.textContent = `${i + 1}. ${line.en}`;
+        const cn = document.createElement('div');
+        cn.className = 'line-cn';
+        cn.textContent = line.cn;
+        txt.appendChild(en);
+        if (line.cn) txt.appendChild(cn);
+        txt.addEventListener('click', () => {
+          audio.currentTime = line.t;
+          if (audio.paused) void audio.play();
+        });
+
+        const btnSeek = document.createElement('button');
+        btnSeek.className = 'line-seek';
+        btnSeek.textContent = '▶ SEEK';
+        btnSeek.title = '跳到这一行';
+        btnSeek.addEventListener('click', () => {
+          audio.currentTime = line.t;
+          if (audio.paused) void audio.play();
+        });
+
+        row.appendChild(tsInput);
+        row.appendChild(btnSet);
+        row.appendChild(txt);
+        row.appendChild(btnSeek);
+        linesHost.appendChild(row);
+      });
+      updateActiveRow();
+    }
+
+    function updateActiveRow() {
+      const t = audio.currentTime;
+      let activeIdx = -1;
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i]!.t <= t) activeIdx = i;
+      }
+      const rows = linesHost.querySelectorAll<HTMLElement>('.line-row');
+      rows.forEach((r) => r.classList.remove('is-active', 'is-pending'));
+      if (activeIdx >= 0 && rows[activeIdx]) rows[activeIdx].classList.add('is-active');
+      if (tapMode && pendingIdx < lines.length && rows[pendingIdx]) {
+        rows[pendingIdx].classList.add('is-pending');
+      }
+    }
+
+    function setTapMode(on: boolean) {
+      tapMode = on;
+      btnTap.textContent = on ? 'TAP MODE: ON  (T 标记)' : 'TAP MODE: OFF';
+      btnTap.classList.toggle('bg-candle', on);
+      btnTap.classList.toggle('text-ink', on);
+      updateActiveRow();
+    }
+
+    btnTap.addEventListener('click', () => setTapMode(!tapMode));
+
+    audio.addEventListener('timeupdate', () => {
+      updateActiveRow();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      // Don't intercept when user is typing in the timestamp inputs
+      if (e.target instanceof HTMLInputElement) return;
+      if (e.key === ' ') {
+        e.preventDefault();
+        if (audio.paused) void audio.play();
+        else audio.pause();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        audio.currentTime = Math.max(0, audio.currentTime - (e.shiftKey ? 5 : 2));
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + (e.shiftKey ? 5 : 2));
+      } else if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        if (!tapMode) {
+          setTapMode(true);
+          setStatus('Tap mode ON; 按 T 标记下一句');
+          return;
+        }
+        if (pendingIdx >= lines.length) {
+          setStatus('全部行已标记完');
+          return;
+        }
+        lastTapUndoIdx = pendingIdx;
+        lastTapPrevT = lines[pendingIdx]!.t;
+        lines[pendingIdx]!.t = audio.currentTime;
+        const row = linesHost.querySelectorAll<HTMLElement>('.line-row')[pendingIdx]!;
+        const input = row.querySelector<HTMLInputElement>('.line-ts')!;
+        input.value = fmtTs(audio.currentTime);
+        setDirty(true);
+        pendingIdx += 1;
+        updateActiveRow();
+        // Scroll pending row into view
+        if (pendingIdx < lines.length) {
+          const nextRow = linesHost.querySelectorAll<HTMLElement>('.line-row')[pendingIdx];
+          if (nextRow) nextRow.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      } else if (e.key === 'z' || e.key === 'Z') {
+        e.preventDefault();
+        if (lastTapUndoIdx < 0) {
+          setStatus('没有可撤销的 Tap');
+          return;
+        }
+        lines[lastTapUndoIdx]!.t = lastTapPrevT;
+        const row = linesHost.querySelectorAll<HTMLElement>('.line-row')[lastTapUndoIdx]!;
+        const input = row.querySelector<HTMLInputElement>('.line-ts')!;
+        input.value = fmtTs(lastTapPrevT);
+        pendingIdx = lastTapUndoIdx;
+        lastTapUndoIdx = -1;
+        setDirty(true);
+        updateActiveRow();
+        setStatus('已撤销');
+      }
+    });
+
+    btnSave.addEventListener('click', async () => {
+      const lrc = buildLrc(title, artist, lines);
+      setStatus('保存中…');
+      try {
+        const r = await fetch('/api/save-lrc', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, filename: lrcFilename, content: lrc }),
+        });
+        const j = await r.json();
+        if (!j.ok) throw new Error(j.error || 'unknown');
+        setStatus('✓ 已保存');
+        setDirty(false);
+      } catch (e: any) {
+        setStatus('✗ 保存失败: ' + e.message);
+      }
+    });
+
+    window.addEventListener('beforeunload', (e) => {
+      if (dirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    // Init
+    (async () => {
+      const r = await fetch(lrcUrl);
+      const text = await r.text();
+      lines = parseLrc(text);
+      render();
+      setStatus(`已加载 ${lines.length} 行`);
+    })();
+  </script>
+</BaseLayout>

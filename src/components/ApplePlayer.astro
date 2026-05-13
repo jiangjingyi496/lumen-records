@@ -1,0 +1,724 @@
+---
+interface Song {
+  title: string;
+  audio: string;
+  lrc?: string;
+  duration?: number;
+}
+
+interface Props {
+  songs: Song[];
+  cover: string;
+  artist: string;
+  albumTitle: string;
+  bgColor: string;
+  accentColor: string;
+}
+
+const { songs, cover, artist, albumTitle, bgColor, accentColor } = Astro.props;
+const songData = songs.map((s, i) => ({
+  i,
+  title: s.title,
+  audio: s.audio,
+  lrc: s.lrc ?? '',
+  duration: s.duration ?? 0,
+}));
+---
+
+<div
+  class="player-shell"
+  data-songs={JSON.stringify(songData)}
+  data-cover={cover}
+  data-artist={artist}
+  data-album={albumTitle}
+  style={`--bg-color: ${bgColor}; --accent: ${accentColor};`}
+>
+  <div class="player-bg" style={`background-image: url(${cover})`}></div>
+  <div class="player-tint"></div>
+
+  <div class="player-grid">
+    <!-- LEFT: cover + controls -->
+    <div class="player-left">
+      <div class="cover-wrap">
+        <img class="player-cover" src={cover} alt={albumTitle} />
+      </div>
+
+      <div class="meta-block">
+        <div class="track-title" data-bind="title">{songs[0]?.title ?? ''}</div>
+        <div class="track-sub">
+          <span class="artist-name">{artist}</span>
+          <span class="dot">·</span>
+          <span class="album-name">{albumTitle}</span>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <div class="progress-bar" data-bind="progress-bar">
+          <div class="progress-loaded" data-bind="progress-loaded"></div>
+          <div class="progress-played" data-bind="progress-played"></div>
+          <div class="progress-thumb" data-bind="progress-thumb"></div>
+        </div>
+        <div class="time-row">
+          <span data-bind="time-current">0:00</span>
+          <span data-bind="time-total">0:00</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="ctrl" data-action="prev" aria-label="Previous">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+          </svg>
+        </button>
+        <button class="ctrl ctrl-play" data-action="toggle" aria-label="Play/Pause">
+          <svg class="icon-play" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="display:none">
+            <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+          </svg>
+        </button>
+        <button class="ctrl" data-action="next" aria-label="Next">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="tracks">
+        {
+          songs.map((s, i) => (
+            <button class="track-row" data-track={i} data-bind="track-row">
+              <span class="track-num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="track-name">{s.title}</span>
+              <span class="track-dur">
+                {s.duration ? `${Math.floor(s.duration / 60)}:${String(s.duration % 60).padStart(2, '0')}` : '--:--'}
+              </span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- RIGHT: lyrics -->
+    <div class="player-right">
+      <div class="lyrics-viewport" data-bind="lyrics-viewport">
+        <div class="lyrics-stack" data-bind="lyrics-stack">
+          <div class="lyric-placeholder">— loading lyrics —</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio data-bind="audio" preload="metadata"></audio>
+</div>
+
+<script>
+  type Song = { i: number; title: string; audio: string; lrc: string; duration: number };
+  type LrcLine = { t: number; en: string; cn: string };
+
+  const BILINGUAL_SEP = '||';
+
+  function parseLRC(text: string): LrcLine[] {
+    const lines: LrcLine[] = [];
+    const re = /\[(\d{1,2}):(\d{1,2}(?:\.\d+)?)\](.*)/;
+    for (const raw of text.split(/\r?\n/)) {
+      const m = raw.match(re);
+      if (!m) continue;
+      const mm = parseInt(m[1]!, 10);
+      const ss = parseFloat(m[2]!);
+      const body = m[3]!.trim();
+      const sepIdx = body.indexOf(BILINGUAL_SEP);
+      const en = sepIdx >= 0 ? body.slice(0, sepIdx).trim() : body;
+      const cn = sepIdx >= 0 ? body.slice(sepIdx + BILINGUAL_SEP.length).trim() : '';
+      lines.push({ t: mm * 60 + ss, en, cn });
+    }
+    return lines.sort((a, b) => a.t - b.t);
+  }
+
+  function fmtTime(s: number): string {
+    if (!isFinite(s) || s < 0) s = 0;
+    const m = Math.floor(s / 60);
+    const r = Math.floor(s % 60);
+    return `${m}:${String(r).padStart(2, '0')}`;
+  }
+
+  function findActive(lrc: LrcLine[], t: number): number {
+    let lo = 0,
+      hi = lrc.length - 1,
+      ans = -1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      if (lrc[mid]!.t <= t) {
+        ans = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    return ans;
+  }
+
+  document.querySelectorAll<HTMLElement>('.player-shell').forEach((shell) => {
+    const songs: Song[] = JSON.parse(shell.dataset.songs ?? '[]');
+    const audio = shell.querySelector<HTMLAudioElement>('[data-bind="audio"]')!;
+    const titleEl = shell.querySelector<HTMLElement>('[data-bind="title"]')!;
+    const curEl = shell.querySelector<HTMLElement>('[data-bind="time-current"]')!;
+    const totEl = shell.querySelector<HTMLElement>('[data-bind="time-total"]')!;
+    const barEl = shell.querySelector<HTMLElement>('[data-bind="progress-bar"]')!;
+    const playedEl = shell.querySelector<HTMLElement>('[data-bind="progress-played"]')!;
+    const loadedEl = shell.querySelector<HTMLElement>('[data-bind="progress-loaded"]')!;
+    const thumbEl = shell.querySelector<HTMLElement>('[data-bind="progress-thumb"]')!;
+    const iconPlay = shell.querySelector<HTMLElement>('.icon-play')!;
+    const iconPause = shell.querySelector<HTMLElement>('.icon-pause')!;
+    const lyricsStack = shell.querySelector<HTMLElement>('[data-bind="lyrics-stack"]')!;
+    const lyricsViewport = shell.querySelector<HTMLElement>('[data-bind="lyrics-viewport"]')!;
+    const trackRows = Array.from(shell.querySelectorAll<HTMLButtonElement>('[data-bind="track-row"]'));
+
+    let currentIdx = 0;
+    let currentLrc: LrcLine[] = [];
+    let lastActive = -1;
+
+    const lrcCache = new Map<string, LrcLine[]>();
+
+    async function loadLrc(url: string): Promise<LrcLine[]> {
+      if (!url) return [];
+      if (lrcCache.has(url)) return lrcCache.get(url)!;
+      try {
+        const r = await fetch(url);
+        if (!r.ok) return [];
+        const text = await r.text();
+        const parsed = parseLRC(text);
+        lrcCache.set(url, parsed);
+        return parsed;
+      } catch {
+        return [];
+      }
+    }
+
+    function renderLyrics(lrc: LrcLine[]) {
+      lyricsStack.innerHTML = '';
+      if (!lrc.length) {
+        const div = document.createElement('div');
+        div.className = 'lyric-placeholder';
+        div.textContent = '— 暂无歌词 —';
+        lyricsStack.appendChild(div);
+        return;
+      }
+      // 顶部和底部加 spacer 让首尾行能滚到中间
+      const topSpacer = document.createElement('div');
+      topSpacer.className = 'lyric-spacer';
+      lyricsStack.appendChild(topSpacer);
+      lrc.forEach((line, i) => {
+        const div = document.createElement('div');
+        div.className = 'lyric-line';
+        div.dataset.idx = String(i);
+        const primary = document.createElement('div');
+        primary.className = 'lyric-en';
+        primary.textContent = line.en || ' ';
+        div.appendChild(primary);
+        if (line.cn) {
+          const secondary = document.createElement('div');
+          secondary.className = 'lyric-cn';
+          secondary.textContent = line.cn;
+          div.appendChild(secondary);
+        }
+        div.addEventListener('click', () => {
+          audio.currentTime = line.t;
+          if (audio.paused) void audio.play();
+        });
+        lyricsStack.appendChild(div);
+      });
+      const bottomSpacer = document.createElement('div');
+      bottomSpacer.className = 'lyric-spacer';
+      lyricsStack.appendChild(bottomSpacer);
+    }
+
+    function setActive(idx: number) {
+      if (idx === lastActive) return;
+      const prevEl = lyricsStack.querySelector<HTMLElement>('.lyric-line.is-active');
+      if (prevEl) prevEl.classList.remove('is-active');
+      lastActive = idx;
+      if (idx < 0) return;
+      const el = lyricsStack.querySelector<HTMLElement>(`.lyric-line[data-idx="${idx}"]`);
+      if (!el) return;
+      el.classList.add('is-active');
+      // 目标 Y: 桌面端 = 封面垂直中心; 移动端(单列) = 视口中心
+      const cover = shell.querySelector<HTMLElement>('.cover-wrap');
+      let targetY: number;
+      if (cover && window.innerWidth > 900) {
+        const coverRect = cover.getBoundingClientRect();
+        targetY = coverRect.top + coverRect.height / 2;
+      } else {
+        const vpRect = lyricsViewport.getBoundingClientRect();
+        targetY = vpRect.top + vpRect.height / 2;
+      }
+      const elRect = el.getBoundingClientRect();
+      const elCenterY = elRect.top + elRect.height / 2;
+      const delta = elCenterY - targetY;
+      // 用 instant 绕过 CSS scroll-behavior: smooth — smooth 在 iframe 或快速切换时会被打断
+      lyricsViewport.scrollTo({
+        top: lyricsViewport.scrollTop + delta,
+        behavior: 'instant' as ScrollBehavior,
+      });
+    }
+
+    async function playSong(idx: number) {
+      currentIdx = ((idx % songs.length) + songs.length) % songs.length;
+      const s = songs[currentIdx]!;
+      titleEl.textContent = s.title;
+      trackRows.forEach((r, i) => r.classList.toggle('is-playing', i === currentIdx));
+      audio.src = s.audio;
+      lastActive = -1;
+      currentLrc = await loadLrc(s.lrc);
+      renderLyrics(currentLrc);
+      try {
+        await audio.play();
+      } catch {
+        // 自动播放被浏览器拒绝
+      }
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      const t = audio.currentTime;
+      const d = audio.duration;
+      curEl.textContent = fmtTime(t);
+      if (isFinite(d)) {
+        totEl.textContent = fmtTime(d);
+        const pct = (t / d) * 100;
+        playedEl.style.width = `${pct}%`;
+        thumbEl.style.left = `${pct}%`;
+      }
+      const idx = findActive(currentLrc, t);
+      setActive(idx);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      totEl.textContent = fmtTime(audio.duration);
+    });
+
+    audio.addEventListener('progress', () => {
+      if (audio.buffered.length && isFinite(audio.duration)) {
+        const end = audio.buffered.end(audio.buffered.length - 1);
+        loadedEl.style.width = `${(end / audio.duration) * 100}%`;
+      }
+    });
+
+    audio.addEventListener('ended', () => {
+      void playSong(currentIdx + 1);
+    });
+
+    audio.addEventListener('play', () => {
+      iconPlay.style.display = 'none';
+      iconPause.style.display = '';
+    });
+    audio.addEventListener('pause', () => {
+      iconPlay.style.display = '';
+      iconPause.style.display = 'none';
+    });
+
+    shell.querySelector('[data-action="toggle"]')!.addEventListener('click', () => {
+      if (!audio.src) {
+        void playSong(0);
+        return;
+      }
+      if (audio.paused) void audio.play();
+      else audio.pause();
+    });
+    shell.querySelector('[data-action="prev"]')!.addEventListener('click', () => {
+      void playSong(currentIdx - 1);
+    });
+    shell.querySelector('[data-action="next"]')!.addEventListener('click', () => {
+      void playSong(currentIdx + 1);
+    });
+    trackRows.forEach((row) => {
+      row.addEventListener('click', () => {
+        const i = Number(row.dataset.track);
+        void playSong(i);
+      });
+    });
+
+    barEl.addEventListener('click', (e) => {
+      const rect = barEl.getBoundingClientRect();
+      const ratio = (e.clientX - rect.left) / rect.width;
+      if (isFinite(audio.duration)) {
+        audio.currentTime = Math.max(0, Math.min(audio.duration, ratio * audio.duration));
+      }
+    });
+
+    // 初始化第一首的元数据 + 歌词预加载,但不自动播放
+    (async () => {
+      const s = songs[0]!;
+      if (s) {
+        titleEl.textContent = s.title;
+        trackRows[0]?.classList.add('is-playing');
+        audio.src = s.audio;
+        currentLrc = await loadLrc(s.lrc);
+        renderLyrics(currentLrc);
+      }
+    })();
+  });
+</script>
+
+<style>
+  .player-shell {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    color: #fff;
+    min-height: 640px;
+    isolation: isolate;
+  }
+
+  .player-bg {
+    position: absolute;
+    inset: -40px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(60px) saturate(1.4);
+    transform: scale(1.15);
+    opacity: 0.55;
+    z-index: 0;
+  }
+
+  .player-tint {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--bg-color) 0%, rgba(0, 0, 0, 0.75) 100%);
+    opacity: 0.78;
+    z-index: 1;
+  }
+
+  /* 角装饰已全部移除 — 后续等真正的素材图再接进来 */
+
+  .player-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 60px;
+    padding: 56px 56px 40px;
+  }
+
+  /* === LEFT: cover + controls === */
+  .player-left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .cover-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .player-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .meta-block {
+    margin-top: 8px;
+  }
+
+  .track-title {
+    font-family: 'Cinzel', 'EB Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.03em;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    line-height: 1.3;
+  }
+
+  .track-sub {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 6px;
+  }
+
+  .track-sub .dot {
+    margin: 0 6px;
+    opacity: 0.5;
+  }
+
+  .progress-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .progress-bar {
+    position: relative;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  .progress-loaded {
+    position: absolute;
+    inset: 0;
+    width: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+
+  .progress-played {
+    position: absolute;
+    inset: 0;
+    width: 0;
+    background: var(--accent);
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(201, 163, 90, 0.4);
+  }
+
+  .progress-thumb {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-radius: 50%;
+    background: var(--accent);
+    transform: translateY(-50%);
+    box-shadow: 0 0 12px var(--accent);
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .progress-bar:hover .progress-thumb {
+    opacity: 1;
+  }
+
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+  }
+
+  .ctrl {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    padding: 8px;
+    transition: color 200ms ease, transform 200ms ease;
+  }
+
+  .ctrl:hover {
+    color: var(--accent);
+  }
+
+  .ctrl-play {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .ctrl-play:hover {
+    background: var(--accent);
+    color: var(--bg-color);
+    transform: scale(1.05);
+  }
+
+  .tracks {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .track-row {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 10px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background 200ms ease, color 200ms ease;
+  }
+
+  .track-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+  }
+
+  .track-row.is-playing {
+    color: var(--accent);
+  }
+
+  .track-row.is-playing .track-num::before {
+    content: '♪ ';
+  }
+
+  .track-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .track-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-style: italic;
+  }
+
+  .track-dur {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  /* === RIGHT: lyrics === */
+  .player-right {
+    position: relative;
+    min-height: 540px;
+  }
+
+  /* 这些选择器需要 :global,因为歌词行是 JS createElement 生成的,
+     不会自动带 Astro 的 scope 属性。 */
+  :global(.player-shell .lyrics-viewport) {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 18%,
+      black 82%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 18%,
+      black 82%,
+      transparent 100%
+    );
+  }
+
+  :global(.player-shell .lyrics-viewport::-webkit-scrollbar) {
+    width: 6px;
+  }
+
+  :global(.player-shell .lyrics-viewport::-webkit-scrollbar-thumb) {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+  }
+
+  :global(.player-shell .lyrics-stack) {
+    padding: 0 8px;
+  }
+
+  :global(.player-shell .lyric-spacer) {
+    height: 240px;
+  }
+
+  :global(.player-shell .lyric-line) {
+    padding: 14px 0;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.32);
+  }
+
+  :global(.player-shell .lyric-line:hover) {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  :global(.player-shell .lyric-line .lyric-en) {
+    font-family: 'EB Garamond', 'Garamond', serif;
+    font-size: 22px;
+    line-height: 1.45;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: inherit;
+  }
+
+  :global(.player-shell .lyric-line .lyric-cn) {
+    font-family: 'STKaiti', 'KaiTi', 'BiauKai', '楷体', 'EB Garamond', serif;
+    font-size: 16px;
+    line-height: 1.55;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+    opacity: 0.8;
+    color: inherit;
+  }
+
+  :global(.player-shell .lyric-line.is-active) {
+    color: #fff !important;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  :global(.player-shell .lyric-line.is-active .lyric-en) {
+    font-size: 28px !important;
+    font-weight: 700 !important;
+  }
+
+  :global(.player-shell .lyric-line.is-active .lyric-cn) {
+    font-size: 19px !important;
+    font-weight: 500 !important;
+    opacity: 0.95;
+  }
+
+  :global(.player-shell .lyric-placeholder) {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    padding: 40px 0;
+  }
+
+  /* === Responsive === */
+  @media (max-width: 900px) {
+    .player-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding: 32px 24px;
+    }
+    .player-right {
+      min-height: 400px;
+    }
+    :global(.player-shell .lyric-line .lyric-en) {
+      font-size: 17px;
+    }
+    :global(.player-shell .lyric-line .lyric-cn) {
+      font-size: 14px;
+    }
+    :global(.player-shell .lyric-line.is-active .lyric-en) {
+      font-size: 21px !important;
+    }
+    :global(.player-shell .lyric-line.is-active .lyric-cn) {
+      font-size: 16px !important;
+    }
+  }
+</style>

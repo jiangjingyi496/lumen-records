@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#5a7a6a" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#0b0a08"/>
+    </radialGradient>
+    <linearGradient id="frame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c9a35a"/>
+      <stop offset="100%" stop-color="#8d6e3a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="300" r="200" fill="none" stroke="url(#frame)" stroke-width="2" opacity="0.7"/>
+  <circle cx="300" cy="300" r="160" fill="none" stroke="url(#frame)" stroke-width="1" opacity="0.5"/>
+  <circle cx="300" cy="300" r="120" fill="none" stroke="url(#frame)" stroke-width="0.5" opacity="0.4"/>
+  <text x="300" y="280" font-family="Cinzel, Trajan Pro, serif" font-size="32" fill="#c9a35a" text-anchor="middle" letter-spacing="4">LUMEN</text>
+  <text x="300" y="320" font-family="Cinzel, Trajan Pro, serif" font-size="24" fill="#b89568" text-anchor="middle" letter-spacing="3">AD REVELATIONEM</text>
+  <text x="300" y="360" font-family="EB Garamond, serif" font-size="14" fill="#f4d68a" text-anchor="middle" font-style="italic" opacity="0.7">— placeholder cover —</text>
+</svg>

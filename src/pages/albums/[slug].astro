@@ -1,0 +1,82 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ApplePlayer from '../../components/ApplePlayer.astro';
+import { withBase } from '../../lib/path';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('albums');
+  return albums.map((album) => ({
+    params: { slug: album.id },
+    props: { album },
+  }));
+}
+
+const { album } = Astro.props;
+const { Content } = await render(album);
+
+// 把 cover/audio/lrc 都加上 base 前缀，以便部署到 GitHub Pages project page。
+const coverUrl = withBase(album.data.cover);
+const songsWithBase = album.data.songs.map((s) => ({
+  ...s,
+  audio: withBase(s.audio),
+  lrc: s.lrc ? withBase(s.lrc) : s.lrc,
+}));
+---
+
+<BaseLayout title={`${album.data.title} · JiangJingyi`} description={album.data.subtitle}>
+  <style is:inline set:html={`:root { --page-accent: ${album.data.accentColor}; --page-bg: ${album.data.bgColor}; }`}></style>
+  <article class="max-w-6xl mx-auto">
+    <a
+      href={withBase('/')}
+      class="inline-block mb-6 text-sm text-ochre/70 hover:text-candle font-mono tracking-widest"
+    >
+      ← BACK TO ALBUMS
+    </a>
+
+    <header class="mb-8">
+      <p class="font-mono text-xs tracking-widest text-ochre/70 mb-2">
+        {album.data.year} · {album.data.artist}
+      </p>
+      <h1 class="font-display text-3xl md:text-5xl text-goldleaf text-shadow-candle mb-2 leading-tight">
+        {album.data.title}
+      </h1>
+      {
+        album.data.subtitle && (
+          <p class="font-body italic text-ochre text-lg leading-relaxed">{album.data.subtitle}</p>
+        )
+      }
+    </header>
+
+    <section class="mb-12">
+      <ApplePlayer
+        songs={songsWithBase}
+        cover={coverUrl}
+        artist={album.data.artist}
+        albumTitle={album.data.title}
+        bgColor={album.data.bgColor}
+        accentColor={album.data.accentColor}
+      />
+    </section>
+
+    {
+      album.data.description && (
+        <section class="mb-10 max-w-3xl">
+          <h2 class="font-display text-sm tracking-[0.3em] text-ochre mb-4">⟁ ABOUT ⟁</h2>
+          <div class="text-parchment/80 leading-relaxed whitespace-pre-line font-body">
+            {album.data.description}
+          </div>
+        </section>
+      )
+    }
+
+    <div class="divider-ornate mb-8 max-w-3xl"></div>
+
+    <section class="max-w-3xl">
+      <h2 class="font-display text-sm tracking-[0.3em] text-ochre mb-4">⟁ LINER NOTES ⟁</h2>
+      <div class="text-parchment/80 leading-loose font-body">
+        <Content />
+      </div>
+    </section>
+  </article>
+</BaseLayout>

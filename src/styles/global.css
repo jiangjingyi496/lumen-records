@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ 烛光底色 + 旧纸质感 ============ */
+@layer base {
+  :root {
+    color-scheme: dark;
+    /* 由专辑页面注入: 例 #c9a35a; 默认走 brass */
+    --page-accent: #c9a35a;
+    --page-bg: #0b0a08;
+  }
+
+  html,
+  body {
+    background-color: theme('colors.ink');
+    color: theme('colors.parchment');
+    font-family: theme('fontFamily.body');
+    font-feature-settings: 'liga' 1, 'kern' 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    /* 仅渐变层 (烛光晕/底色), 跟随专辑 --page-accent / --page-bg */
+    background-image:
+      radial-gradient(ellipse 90% 60% at 50% 0%, color-mix(in srgb, var(--page-accent) 14%, transparent), transparent 60%),
+      radial-gradient(ellipse 70% 45% at 50% 100%, color-mix(in srgb, var(--page-bg) 50%, transparent), transparent 70%);
+    background-attachment: fixed, fixed;
+    background-repeat: no-repeat, no-repeat;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* 卷草底纹已移除 — 等用户后续提供 PNG/SVG 资源再接进来.
+     现在只保留一层非常淡的呼吸光斑, 让纯黑不那么死板. */
+
+  /* 呼吸光斑: 3 处大尺寸软光斑错位漂浮, 制造"时明时暗"的烛火质感. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(circle 600px at 18% 22%, color-mix(in srgb, var(--page-accent) 8%, transparent), transparent 60%),
+      radial-gradient(circle 480px at 82% 68%, color-mix(in srgb, var(--page-accent) 6%, transparent), transparent 60%),
+      radial-gradient(circle 360px at 50% 50%, rgba(255, 240, 200, 0.035), transparent 65%);
+    background-repeat: no-repeat;
+  }
+
+  /* 正文层级在两层装饰之上 */
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: theme('fontFamily.display');
+    letter-spacing: 0.04em;
+    color: theme('colors.goldleaf');
+  }
+
+  a {
+    color: theme('colors.candle');
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 200ms ease;
+  }
+  a:hover {
+    border-bottom-color: theme('colors.candle');
+  }
+}
+
+/* ============ APlayer 主题改造（覆盖默认绿/蓝色） ============ */
+.aplayer {
+  background: rgba(0, 0, 0, 0.4) !important;
+  color: theme('colors.parchment') !important;
+  border: 1px solid theme('colors.brass');
+  border-radius: 4px;
+  backdrop-filter: blur(8px);
+  font-family: theme('fontFamily.body');
+}
+
+.aplayer .aplayer-info {
+  border-bottom-color: rgba(141, 110, 58, 0.3) !important;
+}
+
+.aplayer .aplayer-info .aplayer-music .aplayer-title {
+  font-family: theme('fontFamily.display');
+  color: theme('colors.goldleaf') !important;
+  letter-spacing: 0.05em;
+}
+
+.aplayer .aplayer-info .aplayer-music .aplayer-author {
+  color: theme('colors.ochre') !important;
+  font-style: italic;
+}
+
+.aplayer .aplayer-bar-wrap .aplayer-bar {
+  background: rgba(141, 110, 58, 0.2) !important;
+}
+
+.aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-loaded {
+  background: rgba(184, 149, 104, 0.3) !important;
+}
+
+.aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-played {
+  background: theme('colors.candle') !important;
+  box-shadow: 0 0 8px rgba(244, 214, 138, 0.5);
+}
+
+.aplayer .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
+  background: theme('colors.goldleaf') !important;
+  box-shadow: 0 0 12px rgba(201, 163, 90, 0.8);
+}
+
+.aplayer .aplayer-icon svg {
+  fill: theme('colors.parchment') !important;
+}
+
+.aplayer .aplayer-icon:hover svg {
+  fill: theme('colors.candle') !important;
+}
+
+.aplayer .aplayer-lrc {
+  background: linear-gradient(
+    to bottom,
+    rgba(11, 10, 8, 1) 0%,
+    transparent 20%,
+    transparent 80%,
+    rgba(11, 10, 8, 1) 100%
+  ) !important;
+}
+
+.aplayer .aplayer-lrc p {
+  color: rgba(230, 220, 198, 0.4) !important;
+  font-family: theme('fontFamily.body');
+  font-size: 14px !important;
+  line-height: 2 !important;
+  transition: all 300ms ease;
+}
+
+.aplayer .aplayer-lrc p.aplayer-lrc-current {
+  color: theme('colors.candle') !important;
+  font-weight: 500;
+  font-size: 16px !important;
+  text-shadow: 0 0 12px rgba(244, 214, 138, 0.4);
+  letter-spacing: 0.03em;
+}
+
+.aplayer .aplayer-list {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-top-color: rgba(141, 110, 58, 0.3) !important;
+}
+
+.aplayer .aplayer-list ol li {
+  border-top-color: rgba(141, 110, 58, 0.15) !important;
+  color: theme('colors.parchment') !important;
+  transition: background 200ms ease;
+}
+
+.aplayer .aplayer-list ol li:hover {
+  background: rgba(244, 214, 138, 0.08) !important;
+}
+
+.aplayer .aplayer-list ol li.aplayer-list-light {
+  background: rgba(201, 163, 90, 0.15) !important;
+}
+
+.aplayer .aplayer-list ol li .aplayer-list-cur {
+  background: theme('colors.candle') !important;
+}
+
+/* ============ 自定义工具类 ============ */
+.divider-ornate {
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    theme('colors.brass') 50%,
+    transparent 100%
+  );
+  height: 1px;
+}
+
+.text-shadow-candle {
+  text-shadow: 0 0 24px rgba(244, 214, 138, 0.4);
+}

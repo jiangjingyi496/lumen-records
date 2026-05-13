@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/path';
+
+const albums = (await getCollection('albums')).sort(
+  (a, b) => b.data.year - a.data.year,
+);
+---
+
+<BaseLayout title="🎛 Tune · JiangJingyi">
+  <section class="mb-10">
+    <h1 class="font-display text-4xl text-goldleaf text-shadow-candle mb-2">⟁ LYRIC TUNER ⟁</h1>
+    <p class="text-parchment/70 font-body italic">
+      手工对齐每一句歌词的时间戳。听音乐 → 按 <kbd class="bg-black/30 px-2 py-0.5 rounded text-candle">T</kbd> 标记当前句 → 按 <kbd class="bg-black/30 px-2 py-0.5 rounded text-candle">SAVE</kbd> 写入。
+    </p>
+    <p class="text-parchment/50 text-sm mt-2">
+      调过的 LRC 不会被 <code class="text-candle">rebuild-lrc.py</code> 覆盖(除非加 <code class="text-candle">--force</code>)。
+    </p>
+  </section>
+
+  {
+    albums.map((album) => (
+      <section class="mb-12">
+        <h2 class="font-display text-2xl text-goldleaf mb-1">{album.data.title}</h2>
+        {album.data.subtitle && (
+          <p class="font-body italic text-ochre text-sm mb-4">{album.data.subtitle}</p>
+        )}
+        <ul class="border border-brass/30">
+          {album.data.songs.map((song, idx) => (
+            <li class="border-b border-brass/20 last:border-b-0">
+              <a
+                href={withBase(`/tune/${album.id}/${idx}/`)}
+                class="flex items-center gap-4 px-4 py-3 hover:bg-candle/5 transition-colors"
+              >
+                <span class="font-mono text-xs text-ochre/70 w-8">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <span class="flex-1 text-parchment font-body italic">{song.title}</span>
+                <span class="text-xs text-parchment/50 font-mono">→ 调音</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</BaseLayout>
