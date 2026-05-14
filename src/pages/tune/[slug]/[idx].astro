@@ -24,6 +24,19 @@ const lrcUrl = withBase(song.lrc);
 ---
 
 <BaseLayout title={`🎛 ${song.title} · Tune`}>
+  <div id="prod-warning" style="display:none" class="max-w-5xl mx-auto mb-6 p-4 border border-crimson bg-crimson/10 text-parchment">
+    <div class="font-display text-crimson text-sm tracking-widest uppercase mb-2">⚠ 只读模式 · READ-ONLY</div>
+    <div class="text-sm leading-relaxed">
+      调音器需要本地 dev server 才能保存(GitHub Pages 是静态站,没有 SAVE 后端)。
+      <br />
+      请打开本地版:
+      <a class="text-candle underline" href="http://127.0.0.1:4321/lumen-records/" target="_blank">http://127.0.0.1:4321/lumen-records/</a>
+      <span class="text-parchment/60"> → TUNE → 选这首歌</span>
+      <br />
+      <span class="text-parchment/50 text-xs">本地服务由 launchd 一直在跑,关 Claude 也不影响。</span>
+    </div>
+  </div>
+
   <article
     class="max-w-5xl mx-auto"
     data-slug={albumId}
@@ -197,6 +210,22 @@ const lrcUrl = withBase(song.lrc);
 
     const root = document.getElementById('tuner-root') as HTMLElement;
     if (!root) throw new Error('no tuner root');
+
+    // 只有在本地 dev (localhost / 127.0.0.1) 才存在 /api/save-lrc 后端 (Vite middleware).
+    // 部署到 GitHub Pages 上是静态站, SAVE 没有目标, 这里挂"只读"警示并禁用按钮.
+    const IS_LOCAL = ['localhost', '127.0.0.1', '0.0.0.0'].includes(location.hostname);
+    if (!IS_LOCAL) {
+      const warn = document.getElementById('prod-warning');
+      if (warn) warn.style.display = 'block';
+      const btnSaveEl = document.getElementById('btn-save') as HTMLButtonElement | null;
+      if (btnSaveEl) {
+        btnSaveEl.disabled = true;
+        btnSaveEl.style.opacity = '0.4';
+        btnSaveEl.style.cursor = 'not-allowed';
+        btnSaveEl.title = '只读模式: 请在本地 dev server 上调音';
+        btnSaveEl.textContent = '🔒 只读 · READ-ONLY';
+      }
+    }
 
     const lrcUrl = root.dataset.lrcUrl!;
     const audioUrl = root.dataset.audioUrl!;
@@ -381,6 +410,10 @@ const lrcUrl = withBase(song.lrc);
     });
 
     btnSave.addEventListener('click', async () => {
+      if (!IS_LOCAL) {
+        setStatus('✗ 只读模式 · 请在本地 dev 上调音');
+        return;
+      }
       const lrc = buildLrc(title, artist, lines);
       setStatus('保存中…');
       try {
@@ -389,6 +422,10 @@ const lrcUrl = withBase(song.lrc);
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ slug, filename: lrcFilename, content: lrc }),
         });
+        const ct = r.headers.get('content-type') || '';
+        if (!r.ok || !ct.includes('json')) {
+          throw new Error(`HTTP ${r.status} · ${ct.slice(0, 32) || 'no content-type'}`);
+        }
         const j = await r.json();
         if (!j.ok) throw new Error(j.error || 'unknown');
         setStatus('✓ 已保存');
