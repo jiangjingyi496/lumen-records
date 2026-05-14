@@ -59,12 +59,15 @@ const lrcUrl = withBase(song.lrc);
         <h1 class="font-display text-2xl md:text-3xl text-goldleaf mt-2">{song.title}</h1>
         <p class="text-sm text-parchment/60 italic">{album.title} · {album.artist}</p>
       </div>
-      <div class="flex gap-2">
+      <div class="flex gap-2 flex-wrap">
         <button id="btn-tap-mode" class="px-4 py-2 border border-brass text-candle font-mono text-sm hover:bg-candle/10">
           TAP MODE: OFF
         </button>
         <button id="btn-save" class="px-4 py-2 bg-candle text-ink font-mono text-sm hover:bg-goldleaf">
           💾 SAVE LRC
+        </button>
+        <button id="btn-publish" class="px-4 py-2 border border-goldleaf text-goldleaf font-mono text-sm hover:bg-goldleaf hover:text-ink" title="git add + commit + push 到 GitHub,自动重新部署到官网">
+          🚀 PUBLISH
         </button>
       </div>
     </header>
@@ -251,6 +254,13 @@ const lrcUrl = withBase(song.lrc);
     const statusEl = document.getElementById('tuner-status')!;
     const btnSave = document.getElementById('btn-save')!;
     const btnTap = document.getElementById('btn-tap-mode')!;
+    const btnPublish = document.getElementById('btn-publish') as HTMLButtonElement | null;
+    if (!IS_LOCAL && btnPublish) {
+      btnPublish.disabled = true;
+      btnPublish.style.opacity = '0.4';
+      btnPublish.style.cursor = 'not-allowed';
+      btnPublish.title = '只读模式: 请在本地 dev 上发布';
+    }
 
     audio.src = audioUrl;
 
@@ -455,6 +465,40 @@ const lrcUrl = withBase(song.lrc);
         setStatus(`✗ 保存失败 [${stage}]: ${e?.name || ''} ${e?.message || e}`);
       }
     });
+
+    // PUBLISH: 一键 git add + commit + push 到 GitHub
+    if (btnPublish) {
+      btnPublish.addEventListener('click', async () => {
+        if (!IS_LOCAL) {
+          setStatus('✗ 只读模式 · 请在本地 dev 上发布');
+          return;
+        }
+        if (dirty) {
+          setStatus('✗ 请先 SAVE 当前未保存的改动再发布');
+          return;
+        }
+        const originalText = btnPublish.textContent;
+        btnPublish.disabled = true;
+        btnPublish.textContent = '⏳ 发布中…';
+        setStatus('git add + commit + push 中…');
+        try {
+          const r = await fetch('/api/publish', { method: 'POST' });
+          const j = await r.json();
+          if (!j.ok) throw new Error(j.error || 'unknown');
+          if (!j.changed || j.changed.length === 0) {
+            setStatus('· 已是最新,没有需要发布的改动');
+          } else {
+            setStatus(`✓ 已推送 ${j.changed.length} 个文件 · GitHub Actions 部署中,约 60s 后线上生效`);
+          }
+        } catch (e: any) {
+          console.error('[publish fail]', e);
+          setStatus(`✗ 发布失败: ${e?.message || e}`);
+        } finally {
+          btnPublish.disabled = false;
+          btnPublish.textContent = originalText;
+        }
+      });
+    }
 
     window.addEventListener('beforeunload', (e) => {
       if (dirty) {
