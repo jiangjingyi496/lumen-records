@@ -70,6 +70,18 @@ JOBS: list[TrackJob] = [
         audio_filename="03-ere-thou-art-named.m4a",
         fallback_audio=None,
     ),
+    TrackJob(
+        slug="lumen-ad-revelationem",
+        lrc_filename="04-adventus-tacitus-the-silent-coming.lrc",
+        audio_filename="04-adventus-tacitus-the-silent-coming.m4a",
+        fallback_audio=None,
+    ),
+    TrackJob(
+        slug="lumen-ad-revelationem",
+        lrc_filename="05-canticum-annae.lrc",
+        audio_filename="05-canticum-annae.m4a",
+        fallback_audio=None,
+    ),
     # === La Colomba EP (4 tracks, all share Choral Lament's lyrics) ===
     TrackJob(
         slug="la-colomba-grigia-ep",

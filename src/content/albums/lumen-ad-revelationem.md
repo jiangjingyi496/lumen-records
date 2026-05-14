@@ -23,6 +23,14 @@ songs:
     audio: /audio/lumen-ad-revelationem/03-ere-thou-art-named.m4a
     lrc: /lrc/lumen-ad-revelationem/03-ere-thou-art-named.lrc
     duration: 209
+  - title: "Adventus Tacitus — The Silent Coming"
+    audio: /audio/lumen-ad-revelationem/04-adventus-tacitus-the-silent-coming.m4a
+    lrc: /lrc/lumen-ad-revelationem/04-adventus-tacitus-the-silent-coming.lrc
+    duration: 269
+  - title: "Canticum Annae"
+    audio: /audio/lumen-ad-revelationem/05-canticum-annae.m4a
+    lrc: /lrc/lumen-ad-revelationem/05-canticum-annae.lrc
+    duration: 310
 ---
 
 这里以后可以写专辑的 liner notes、创作背景、神学背景等。
