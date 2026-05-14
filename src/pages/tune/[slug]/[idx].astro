@@ -26,14 +26,20 @@ const lrcUrl = withBase(song.lrc);
 <BaseLayout title={`🎛 ${song.title} · Tune`}>
   <div id="prod-warning" style="display:none" class="max-w-5xl mx-auto mb-6 p-4 border border-crimson bg-crimson/10 text-parchment">
     <div class="font-display text-crimson text-sm tracking-widest uppercase mb-2">⚠ 只读模式 · READ-ONLY</div>
-    <div class="text-sm leading-relaxed">
-      调音器需要本地 dev server 才能保存(GitHub Pages 是静态站,没有 SAVE 后端)。
-      <br />
-      请打开本地版:
-      <a class="text-candle underline" href="http://127.0.0.1:4321/lumen-records/" target="_blank">http://127.0.0.1:4321/lumen-records/</a>
-      <span class="text-parchment/60"> → TUNE → 选这首歌</span>
-      <br />
-      <span class="text-parchment/50 text-xs">本地服务由 launchd 一直在跑,关 Claude 也不影响。</span>
+    <div class="text-sm leading-relaxed mb-3">
+      GitHub Pages 是静态站,没有 SAVE 后端。调音需要本地 dev server。
+    </div>
+    <a
+      id="open-local-tuner"
+      href="#"
+      target="_blank"
+      class="inline-block px-4 py-2 bg-candle text-ink font-mono text-sm hover:bg-goldleaf no-underline"
+    >
+      🎛 在本地打开同一首歌 →
+    </a>
+    <div class="text-parchment/50 text-xs mt-2">
+      本地服务由 launchd 一直在跑,关 Claude 也不影响。<br />
+      链接:<span id="local-tuner-url" class="font-mono text-candle/70"></span>
     </div>
   </div>
 
@@ -217,6 +223,12 @@ const lrcUrl = withBase(song.lrc);
     if (!IS_LOCAL) {
       const warn = document.getElementById('prod-warning');
       if (warn) warn.style.display = 'block';
+      // 构造一个 "本地同一首歌" 的深链接 - 路径不变, 只换 host
+      const localUrl = `http://127.0.0.1:4321${location.pathname}${location.search}`;
+      const linkEl = document.getElementById('open-local-tuner') as HTMLAnchorElement | null;
+      if (linkEl) linkEl.href = localUrl;
+      const urlSpan = document.getElementById('local-tuner-url');
+      if (urlSpan) urlSpan.textContent = localUrl;
       const btnSaveEl = document.getElementById('btn-save') as HTMLButtonElement | null;
       if (btnSaveEl) {
         btnSaveEl.disabled = true;
@@ -256,6 +268,8 @@ const lrcUrl = withBase(song.lrc);
 
     function setDirty(d: boolean) {
       dirty = d;
+      // 只读模式下按钮文字锁死, 不被脏标记覆盖
+      if (!IS_LOCAL) return;
       (btnSave as HTMLButtonElement).textContent = d ? '💾 SAVE LRC *' : '💾 SAVE LRC';
     }
 
