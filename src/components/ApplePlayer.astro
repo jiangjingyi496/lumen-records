@@ -180,12 +180,16 @@ const songData = songs.map((s, i) => ({
     let lastActive = -1;
 
     const lrcCache = new Map<string, LrcLine[]>();
+    // 每次页面加载用一个新的 cache-bust token, 避免 Safari/CDN 缓存了旧 LRC.
+    // 同一次页面会话内 lrcCache 仍 dedupe 不会重复请求.
+    const FETCH_VERSION = Date.now().toString(36);
 
     async function loadLrc(url: string): Promise<LrcLine[]> {
       if (!url) return [];
       if (lrcCache.has(url)) return lrcCache.get(url)!;
       try {
-        const r = await fetch(url);
+        const sep = url.includes('?') ? '&' : '?';
+        const r = await fetch(`${url}${sep}v=${FETCH_VERSION}`);
         if (!r.ok) return [];
         const text = await r.text();
         const parsed = parseLRC(text);
