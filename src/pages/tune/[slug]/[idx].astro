@@ -414,24 +414,31 @@ const lrcUrl = withBase(song.lrc);
         setStatus('✗ 只读模式 · 请在本地 dev 上调音');
         return;
       }
-      const lrc = buildLrc(title, artist, lines);
-      setStatus('保存中…');
+      let stage = 'build-lrc';
       try {
+        const lrc = buildLrc(title, artist, lines);
+        setStatus('保存中…');
+        stage = 'serialize';
+        const body = JSON.stringify({ slug, filename: lrcFilename, content: lrc });
+        stage = 'fetch';
         const r = await fetch('/api/save-lrc', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug, filename: lrcFilename, content: lrc }),
+          body,
         });
+        stage = 'response-check';
         const ct = r.headers.get('content-type') || '';
         if (!r.ok || !ct.includes('json')) {
-          throw new Error(`HTTP ${r.status} · ${ct.slice(0, 32) || 'no content-type'}`);
+          throw new Error(`HTTP ${r.status} · ${ct.slice(0, 40) || 'no content-type'}`);
         }
+        stage = 'parse-json';
         const j = await r.json();
         if (!j.ok) throw new Error(j.error || 'unknown');
         setStatus('✓ 已保存');
         setDirty(false);
       } catch (e: any) {
-        setStatus('✗ 保存失败: ' + e.message);
+        console.error('[tuner save fail]', { stage, error: e, name: e?.name, message: e?.message });
+        setStatus(`✗ 保存失败 [${stage}]: ${e?.name || ''} ${e?.message || e}`);
       }
     });
 
