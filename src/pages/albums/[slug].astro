@@ -65,11 +65,6 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
         <div class="text-parchment/85 leading-relaxed font-body text-lg">
           {album.data.description}
         </div>
-        {album.data.descriptionEn && (
-          <div class="text-parchment/65 leading-relaxed font-body italic mt-4">
-            {album.data.descriptionEn}
-          </div>
-        )}
       </section>
     )}
 
@@ -80,17 +75,29 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
       <div class="text-parchment/85 leading-loose font-body">
         <Content />
       </div>
-      {linerEnHtml && (
-        <>
-          <div class="my-12 flex items-center gap-4">
-            <div class="flex-1 h-px bg-brass/30"></div>
-            <span class="font-mono text-xs tracking-[0.4em] text-ochre/60">ENGLISH</span>
-            <div class="flex-1 h-px bg-brass/30"></div>
-          </div>
-          <div class="liner-en text-parchment/75 leading-loose font-body" set:html={linerEnHtml} />
-        </>
-      )}
     </section>
+
+    {(album.data.descriptionEn || linerEnHtml) && (
+      <>
+        <div class="my-16 flex items-center gap-4">
+          <div class="flex-1 h-px bg-brass/30"></div>
+          <span class="font-mono text-xs tracking-[0.4em] text-ochre/60">ENGLISH</span>
+          <div class="flex-1 h-px bg-brass/30"></div>
+        </div>
+        {album.data.descriptionEn && (
+          <section class="mb-10">
+            <div class="text-parchment/85 leading-relaxed font-body text-lg">
+              {album.data.descriptionEn}
+            </div>
+          </section>
+        )}
+        {linerEnHtml && (
+          <section class="prose-liner">
+            <div class="liner-en text-parchment/85 leading-loose font-body" set:html={linerEnHtml} />
+          </section>
+        )}
+      </>
+    )}
   </article>
 
   <style is:global>
@@ -121,11 +128,14 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
     #album-root .liner-en ul li {
       margin-bottom: 0.5rem;
     }
+    /* strong / em 不换色, 跟周围正文同色, 只用粗体/斜体本身做区分 */
     #album-root .liner-en strong {
-      color: rgba(255, 255, 255, 0.95);
+      color: inherit;
+      font-weight: 700;
     }
     #album-root .liner-en em {
-      color: rgba(230, 220, 198, 1);
+      color: inherit;
+      font-style: italic;
     }
   </style>
 </BaseLayout>
