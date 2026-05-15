@@ -9,6 +9,65 @@ description: |
   一首关于挚爱别离的歌——雾夜港口，一个不能随她同行的男人，
   在她登船的前一夜，把所有未及说出口的话低声唱了出来。
   同一段挽歌被以四种不同的声音重制：从中世纪修道院的合咏，到一位独行修士的清诵，再到游吟诗人的两种民谣。
+descriptionEn: |
+  A song of farewell to a beloved — at a foggy port, a man bound by vows
+  who cannot follow her, sings out his unspoken words the night before she boards.
+  A single lament rendered in four voices: from a medieval monastery choir,
+  to a solitary monk's bare chant, to two ballads of the wandering troubadour.
+linerEn: |
+  ## Where It Comes From
+
+  The inspiration is from the same medieval-era novel. In it: a man bound by sacred vows, unable to follow her, watches the woman he loves board a ship into the northbound fog. **This song is that night — the plank set down, the rope unwound, the river-fog drifting onto the shore — and he, facing the silhouette of her back, sings out everything he could never say.**
+
+  He doesn't try to keep her. He simply takes every thing they once shared, one by one, and hands them back to her —
+
+  > *The plank that bears your foot tonight,*
+  > *was once the wood that held my dreams in flight;*
+  > *the rope that fills your hand this hour,*
+  > *was once the mulberry of childhood's bower.*
+  > *The river will carry you past this misted shore —*
+  > *let it wet my throat first, then your lips once more.*
+
+  **The road I could not walk with you — let the water travel it for me.**
+
+  ## Why Four Versions
+
+  The same parting, sung by different mouths, has entirely different temperatures. This EP hands the lament to four voices, **to see what love and farewell look like in different registers**:
+
+  - **Choral Lament** — A medieval monastery's male choir, in stone-walled reverb, intoning it as a collective. The most restrained, the closest to a funeral rite — **as though the whole monastery were taking on, on his behalf, the part of grief he could not let himself wail aloud**.
+  - **Solo Chant** — A solitary monk in the pre-dawn cloister, singing alone. No accompaniment, only breath and the stones' echo. **The most stripped, the most exposed version** — feeling unedited, straight from the chest.
+  - **Troubadour Ballad** — The same words, set down beside a wayside inn's fire, sung by a wandering minstrel in the folk-ballad's diction. A touch of "let me tell you this story" enters in — **the grief no longer pressed inward, but turned outward, given to every traveler passing through the night**.
+  - **Embellished Version** — On top of the ballad, another layer of ornamental notes, the melody drawn out longer and weaving — **as though the same minstrel, on a different evening, before a listener who especially wanted to linger, sang it through one more time**.
+
+  ## What It Sounds Like
+
+  **The first two** (Choral / Solo Chant) keep the monastic color — male tenor, fully a cappella, the voice held tight, like a throat suppressing a sob. **I deliberately didn't let it leap; I kept a restrained, severe, yet sacred and grave timbre**, with grief held under the weight of the ritual.
+
+  **The latter two** (Ballad / Embellished) turn toward medieval troubadour style — **with the addition of lute pluck and recorder's long tones** — but still avoiding any pop or electronic instrument. The voice opens up slightly, the melody acquires the troubadour's signature sway and the storyteller's diction — **but the grief still does not raise its voice** — more like someone, many years later, recalling that foggy night, finally willing to sing it through to a stranger.
+
+  ## What It Says
+
+  At the heart of the song is one simple promise: **I cannot walk this road with you, but I will become a star you can still see when you look up.**
+
+  > *The dove that left the nest will never find her way,*
+  > *the wind that crossed the river finds no place to stay;*
+  > *and yet —*
+  > *if on some lonely night in foreign lands you rise,*
+  > *and see one star refuse to sink beneath the skies —*
+  > ***that is I.***
+
+  Recurring images in the song:
+
+  - **The plank and the rope** — the wood beneath your foot, the line in your hand — **once belonged to his own boyhood**; he hands these things "that existed before you did" back to you ceremonially, as a substitute for the body he cannot send along.
+  - **The river** — the river will carry you north, and will let his tears reach you by the same water, before your lips do. **What he asks is the thing he cannot do: to have the running water complete the kiss for him.**
+  - **The mulberry and the vines** — the concretion of childhood memory. He folds the softest of his past into the rope you hold.
+  - **The star that won't sink** — his promise to himself for what's left of his life: **he will not go under; he will keep burning, so that one night, in a foreign country, you can still look up.**
+
+  There is no holding back in this foggy night, no accusation; only a man bound by vows, **folding "I" into every thing he can send away**, handing each to the "you" who is leaving — and, for himself, leaving behind a star that will not fall.
+
+  ## A Note On Listening (Honest)
+
+  The whole EP is slow-paced, sparely accompanied; **you may find yourself a little drowsy listening**. The slowness is intentional: it doesn't compete for your attention, it makes room for your breath. **If, while listening, something inside lets go a little — that's the point.**
 artist: JiangJingyi
 producedBy: SUNO
 songs:

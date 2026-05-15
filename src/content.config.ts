@@ -17,7 +17,9 @@ const albums = defineCollection({
     cover: z.string(),
     bgColor: z.string().default('#0b0a08'),
     accentColor: z.string().default('#c9a35a'),
-    description: z.string().optional(),
+    description: z.string().optional(),       // ABOUT (zh)
+    descriptionEn: z.string().optional(),     // ABOUT (en)
+    linerEn: z.string().optional(),           // LINER NOTES (en), 整段 markdown
     songs: z.array(songSchema),
     artist: z.string().default('JiangJingyi'),
     producedBy: z.string().default('SUNO'),

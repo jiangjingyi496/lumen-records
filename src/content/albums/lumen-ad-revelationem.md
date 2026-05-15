@@ -9,6 +9,40 @@ description: |
   一组关于"等候"的音乐。灵感来自基督教的圣烛节——这个节日纪念的，
   是一位老先知在圣殿等了一辈子，终于在一个襁褓中的婴儿身上看见救恩的那一夜。
   五个乐章，中世纪礼仪声响 + 凯尔特空灵女声。
+descriptionEn: |
+  A set of music about waiting. Inspired by Candlemas — the Christian feast
+  that commemorates the night an old prophet, after a lifetime of waiting
+  in the Temple, finally saw salvation in a swaddled infant.
+  Five movements: medieval liturgical voice + Celtic ethereal female chant.
+linerEn: |
+  ## The Story Behind It
+
+  This album draws from the scene of the Presentation of Jesus in Luke 2 (the "Nunc Dimittis" episode). **Mary and Joseph** brought the infant Jesus to the Temple in Jerusalem forty days after his birth, as Jewish law required. In the Temple was an old prophet named **Simeon**, to whom the Holy Spirit had revealed he would not see death before he had seen the Messiah. On that day, moved by the Spirit, Simeon walked into the Temple, took the child from Mary's arms, and spoke the prayer that has been sung for two thousand years —
+
+  > *"Lord, now you let your servant depart in peace, according to your word —*
+  > *for my eyes have seen your salvation."*
+
+  He then turned to Mary and prophesied: *"This child is destined to cause the falling and rising of many … and **a sword will pierce your own soul too**."* Simeon was over a hundred years old; these were the last words of his life. The Christian feast of **Candlemas**, held every February 2nd, commemorates this day.
+
+  ## Why This Album Exists
+
+  I'm writing a medieval-era novel; in it, on one Candlemas night, a small-town square stages a sacred drama — the very story above. The music that ought to have sounded that night — **the album that should have existed, and never was recorded** — I have made, as though it truly had.
+
+  ## What It Says
+
+  Five movements trace the arc of that night: an opening choir at dusk that waits ("O Light, from whence did you come"); the old prophet Simeon steps forward and sings the waiting of his entire life; the Mother walks into the Temple with the child in her arms; Simeon takes the child and speaks the Nunc Dimittis along with the sword-prophecy; finally, the prophetess Anna's song of witness. At its core: **how a man who waited a lifetime, in a single ordinary embrace, finally saw the one thing he had spent his whole life waiting for.**
+
+  ## What It Sounds Like
+
+  I originally wanted to make a strict Gregorian chant album — that 6th-century Catholic liturgical music, unaccompanied single-voice male chant, slow, almost spoken, echoing between cathedral stone walls. But considering how a modern audience listens, **I didn't follow the original form strictly. Instead, I drew on the German vocal ensemble Gregorian (the one that covers pop songs in chant style)** — weaving a slight pop breath into the strict chant frame, gentler, easier on the ear, without losing liturgical gravity.
+
+  The male sections (Simeon's solos and the male choir) walk this line. **The female sections (the Mother and Anna) draw on Celtic music and Enya** — ethereal, soft, half-whispered, like someone telling you a story from long ago, behind a stone wall just out of sight. The instruments are only harp pluck, recorder long tones, and the drone of a portative organ — **no percussion, no electronic instruments, no contemporary pop arrangement**. All tension comes from the voices themselves, the layering of parts, and the silences deliberately left in.
+
+  ## A Note On Listening (Honest)
+
+  This is a very quiet, very slow album, and **you may find yourself getting drowsy listening to it**. Across all five movements there's no swell, no rhythmic climax, no pop hook — only a near-still, candlelit calm. **This is intentional.** It's not music to be excited by; it's music to slow down by. It doesn't compete for your attention. It makes room for your breath to settle, your pulse to find the rhythm of a candle flame.
+
+  Made for a quiet evening alone, a morning when your tea has gone cold, or an afternoon when you need to find your way back to yourself. **If it makes you sleepy, sleep; when you wake up, it's still there** — like a candle that won't go out.
 artist: JiangJingyi
 producedBy: SUNO
 songs:
