@@ -6,30 +6,23 @@ cover: /covers/lumen-ad-revelationem.jpg
 bgColor: "#1a2a2a"
 accentColor: "#c9a35a"
 description: |
-  一组关于"等候"的音乐。灵感来自基督教的圣烛节——每年 2 月 2 日，纪念的是《路加福音》中这样一夜：一位在圣殿守候了一辈子的老先知，终于从一位母亲手中接过襁褓中的婴儿，说出那句流传两千年的祷告——"主啊，如今可以照你的话，释放仆人安然去世，因我的眼睛已经看见你的救恩。"专辑的五个乐章，顺着这一夜的弧线行进。
+  这张专辑取材自《路加福音》第二章里"圣西门献子"的一幕。**圣母玛利亚和约瑟**在婴儿耶稣出生四十天后，按犹太律法将他抱进耶路撒冷的圣殿，献给神。圣殿中有一位老先知**西门**，他得了神的应许：在见到救世主之前不会离世。这一日他被圣灵带进圣殿，从圣母手中接过婴儿，说出那句流传两千年的祷告——
 
-  骨架是中世纪的格里高利圣咏——男声单声部、烛光照不到的石壁回响——但织进了现代格里高利合唱团 Gregorian 的处理方式，把当代听感悄悄缝了进去；女声（圣母与女先知）则参考了 Enya 与凯尔特音乐的那种空灵、近呢喃的吟唱。
+  > *"主啊，如今可以照你的话，释放仆人安然去世——*
+  > *因我的眼睛已经看见你的救恩。"*
+
+  接着他对圣母预言：「这孩子被立，是要叫许多人跌倒，也叫许多人兴起……**这剑，也要刺透你的灵魂**。」——西门已是百岁老人，这是他一生最后的一句话。基督教每年 2 月 2 日的「**圣烛节**」（Candlemas），纪念的正是这一天。
 descriptionEn: |
-  A set of music about waiting. Inspired by Candlemas — held every February 2nd — which commemorates this night from the Gospel of Luke: an old prophet, who had kept watch in the Temple all his life, finally takes a swaddled infant from a mother's arms, and speaks the prayer that has been sung for two thousand years — *"Lord, now you let your servant depart in peace, according to your word, for my eyes have seen your salvation."* The five movements trace the arc of that night.
-
-  The skeleton is medieval Gregorian chant — male monophonic voice, the echo between candlelit stone walls — but it weaves in the approach of the modern ensemble Gregorian, slipping a contemporary breath into the strict frame; the female voices (the Mother and the prophetess) draw on Enya and the ethereal half-whispered chant of Celtic music.
-linerEn: |
-  ## The Story Behind It
-
   This album draws from the scene of the Presentation of Jesus in Luke 2 (the "Nunc Dimittis" episode). **Mary and Joseph** brought the infant Jesus to the Temple in Jerusalem forty days after his birth, as Jewish law required. In the Temple was an old prophet named **Simeon**, to whom the Holy Spirit had revealed he would not see death before he had seen the Messiah. On that day, moved by the Spirit, Simeon walked into the Temple, took the child from Mary's arms, and spoke the prayer that has been sung for two thousand years —
 
   > *"Lord, now you let your servant depart in peace, according to your word —*
   > *for my eyes have seen your salvation."*
 
   He then turned to Mary and prophesied: *"This child is destined to cause the falling and rising of many … and **a sword will pierce your own soul too**."* Simeon was over a hundred years old; these were the last words of his life. The Christian feast of **Candlemas**, held every February 2nd, commemorates this day.
-
+linerEn: |
   ## Why This Album Exists
 
   I'm writing a medieval-era novel; in it, on one Candlemas night, a small-town square stages a sacred drama — the very story above. The music that ought to have sounded that night — **the album that should have existed, and never was recorded** — I have made, as though it truly had.
-
-  ## What It Says
-
-  Five movements trace the arc of that night: an opening choir at dusk that waits ("O Light, from whence did you come"); the old prophet Simeon steps forward and sings the waiting of his entire life; the Mother walks into the Temple with the child in her arms; Simeon takes the child and speaks the Nunc Dimittis along with the sword-prophecy; finally, the prophetess Anna's song of witness. At its core: **how a man who waited a lifetime, in a single ordinary embrace, finally saw the one thing he had spent his whole life waiting for.**
 
   ## What It Sounds Like
 
@@ -67,22 +60,9 @@ songs:
     duration: 310
 ---
 
-## 故事原型
-
-这张专辑取材自《路加福音》第二章里"圣西门献子"的一幕。**圣母玛利亚和约瑟**在婴儿耶稣出生四十天后，按犹太律法将他抱进耶路撒冷的圣殿，献给神。圣殿中有一位老先知**西门**，他得了神的应许：在见到救世主之前不会离世。这一日他被圣灵带进圣殿，从圣母手中接过婴儿，说出那句流传两千年的祷告——
-
-> *"主啊，如今可以照你的话，释放仆人安然去世——*
-> *因我的眼睛已经看见你的救恩。"*
-
-接着他对圣母预言：「这孩子被立，是要叫许多人跌倒，也叫许多人兴起……**这剑，也要刺透你的灵魂**。」——西门已是百岁老人，这是他一生最后的一句话。基督教每年 2 月 2 日的「**圣烛节**」（Candlemas），纪念的正是这一天。
-
 ## 为什么做这张专辑
 
 我在写一部以中世纪为背景的长篇小说，故事里有一年圣烛节的夜晚，小镇广场上演了一出宗教剧，演的就是这个故事。我把那一晚理应响起的音乐——**本该响起、又从未真正被录下来的那一张专辑**——当成它真的存在过那样，做了出来。
-
-## 它讲了什么
-
-五个乐章顺着这一夜的弧线行进：序曲是黄昏的合唱与等候（"光啊，你从何而来"），老先知西门走出来唱出自己一生的等候，圣母怀抱婴儿走入殿中，西门接过孩子说出 Nunc Dimittis 与那一段刺向圣母灵魂的剑的预言，最后是女先知安娜的见证之歌。整张专辑的核心，是一句话：**等了一辈子的人，如何在一个最普通的怀抱里，看见那一件他用一生在等的事**。
 
 ## 音乐的样子
 
