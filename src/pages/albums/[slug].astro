@@ -61,18 +61,18 @@ const songsWithBase = album.data.songs.map((s) => ({
 
     {
       album.data.description && (
-        <section class="mb-10 max-w-3xl">
+        <section class="mb-10">
           <h2 class="font-display text-sm tracking-[0.3em] text-ochre mb-4">⟁ ABOUT ⟁</h2>
-          <div class="text-parchment/80 leading-relaxed whitespace-pre-line font-body">
+          <div class="text-parchment/80 leading-relaxed whitespace-pre-line font-body text-lg">
             {album.data.description}
           </div>
         </section>
       )
     }
 
-    <div class="divider-ornate mb-8 max-w-3xl"></div>
+    <div class="divider-ornate mb-8"></div>
 
-    <section class="max-w-3xl">
+    <section class="prose-liner">
       <h2 class="font-display text-sm tracking-[0.3em] text-ochre mb-4">⟁ LINER NOTES ⟁</h2>
       <div class="text-parchment/80 leading-loose font-body">
         <Content />
