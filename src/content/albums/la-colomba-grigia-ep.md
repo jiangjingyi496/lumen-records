@@ -6,14 +6,13 @@ cover: /covers/la-colomba-grigia-ep.jpg
 bgColor: "#1a1a2a"
 accentColor: "#9aa6c9"
 description: |
-  一首关于挚爱别离的歌——雾夜港口，一个不能随她同行的男人，
-  在她登船的前一夜，把所有未及说出口的话低声唱了出来。
-  同一段挽歌被以四种不同的声音重制：从中世纪修道院的合咏，到一位独行修士的清诵，再到游吟诗人的两种民谣。
+  一首关于挚爱别离的歌。雾夜港口，一个戴着誓约不能随她同行的男人，在她登船北去的前一夜，把所有未及说出口的话低声唱了出来——**船板、长缆、童年的桑荫、夜空中久久不肯沉落的星**。歌里他没有挽留，只是把"我"折成各种他可以送出去的东西，一件一件递给那个正要远去的"你"。
+
+  这张 EP 把同一段挽歌交给四种声音去唱：**中世纪修道院的男声合咏**、**独行修士在凌晨石廊的清诵**、**游吟诗人篝火边的民谣**，以及在民谣上加一层装饰的**华彩版**。完全 a cappella 或近无伴奏。前两版肃穆克制，像葬礼仪式；后两版声线稍稍放开，但悲伤仍不喧哗——更像一个人多年之后回想起那个雾夜，才肯把这段唱给陌生人听。
 descriptionEn: |
-  A song of farewell to a beloved — at a foggy port, a man bound by vows
-  who cannot follow her, sings out his unspoken words the night before she boards.
-  A single lament rendered in four voices: from a medieval monastery choir,
-  to a solitary monk's bare chant, to two ballads of the wandering troubadour.
+  A song of farewell to a beloved. At a foggy port, a man bound by sacred vows who cannot follow her, on the night before she boards the ship north, sings out everything he could never say — **the plank, the rope, the mulberry shade of childhood, the star in the night sky that will not sink**. He doesn't try to keep her; he simply folds "I" into every thing he can send away, handing each, one by one, to the "you" who is leaving.
+
+  This EP renders the same lament in four voices: **a medieval monastery's male choir**, **a solitary monk's bare chant in the pre-dawn cloister**, **a troubadour's ballad beside an inn's fire**, and an **embellished version** with an added layer of ornament. Fully a cappella, or nearly so. The first two are solemn and restrained, like funeral rites; the latter two open up slightly, but the grief still does not raise its voice — more like someone, many years later, recalling that foggy night, finally willing to sing it through to a stranger.
 linerEn: |
   ## Where It Comes From
 

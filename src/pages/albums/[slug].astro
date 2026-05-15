@@ -24,6 +24,8 @@ const songsWithBase = album.data.songs.map((s) => ({
 }));
 
 const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
+const descriptionHtml = album.data.description ? marked.parse(album.data.description) : '';
+const descriptionEnHtml = album.data.descriptionEn ? marked.parse(album.data.descriptionEn) : '';
 ---
 
 <BaseLayout title={`${album.data.title} · JiangJingyi`} description={album.data.subtitle}>
@@ -59,12 +61,10 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
       />
     </section>
 
-    {album.data.description && (
+    {descriptionHtml && (
       <section class="mb-10">
         <h2 class="font-display text-sm tracking-[0.3em] text-ochre mb-4">⟁ ABOUT ⟁</h2>
-        <div class="text-parchment/85 leading-relaxed font-body text-lg">
-          {album.data.description}
-        </div>
+        <div class="about-body text-parchment/85 leading-relaxed font-body text-lg" set:html={descriptionHtml} />
       </section>
     )}
 
@@ -84,11 +84,9 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
           <span class="font-mono text-xs tracking-[0.4em] text-ochre/60">ENGLISH</span>
           <div class="flex-1 h-px bg-brass/30"></div>
         </div>
-        {album.data.descriptionEn && (
+        {descriptionEnHtml && (
           <section class="mb-10">
-            <div class="text-parchment/85 leading-relaxed font-body text-lg">
-              {album.data.descriptionEn}
-            </div>
+            <div class="about-body text-parchment/85 leading-relaxed font-body text-lg" set:html={descriptionEnHtml} />
           </section>
         )}
         {linerEnHtml && (
@@ -101,6 +99,22 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
   </article>
 
   <style is:global>
+    /* ABOUT 段落 (中英都用): marked 渲染出 <p>, 段间留 1rem */
+    #album-root .about-body p {
+      margin-bottom: 1rem;
+    }
+    #album-root .about-body p:last-child {
+      margin-bottom: 0;
+    }
+    #album-root .about-body strong {
+      color: inherit;
+      font-weight: 700;
+    }
+    #album-root .about-body em {
+      color: inherit;
+      font-style: italic;
+    }
+
     /* 英文 liner notes 由 marked 渲染, 给它跟中文一致的排版风格 */
     #album-root .liner-en h2 {
       font-family: 'Cinzel', 'Trajan Pro', serif;

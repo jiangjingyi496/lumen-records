@@ -6,14 +6,13 @@ cover: /covers/lumen-ad-revelationem.jpg
 bgColor: "#1a2a2a"
 accentColor: "#c9a35a"
 description: |
-  一组关于"等候"的音乐。灵感来自基督教的圣烛节——这个节日纪念的，
-  是一位老先知在圣殿等了一辈子，终于在一个襁褓中的婴儿身上看见救恩的那一夜。
-  五个乐章，中世纪礼仪声响 + 凯尔特空灵女声。
+  一组关于"等候"的音乐。灵感来自基督教的圣烛节——每年 2 月 2 日，纪念的是《路加福音》中这样一夜：一位在圣殿守候了一辈子的老先知，终于从一位母亲手中接过襁褓中的婴儿，说出那句流传两千年的祷告——"主啊，如今可以照你的话，释放仆人安然去世，因我的眼睛已经看见你的救恩。"专辑的五个乐章，顺着这一夜的弧线行进。
+
+  骨架是中世纪的格里高利圣咏——男声单声部、烛光照不到的石壁回响——但织进了现代格里高利合唱团 Gregorian 的处理方式，把当代听感悄悄缝了进去；女声（圣母与女先知）则参考了 Enya 与凯尔特音乐的那种空灵、近呢喃的吟唱。**没有打击乐，没有电子乐器，节奏极慢、夜很深——它不抢你的注意力，只把烛台续上一会儿。**
 descriptionEn: |
-  A set of music about waiting. Inspired by Candlemas — the Christian feast
-  that commemorates the night an old prophet, after a lifetime of waiting
-  in the Temple, finally saw salvation in a swaddled infant.
-  Five movements: medieval liturgical voice + Celtic ethereal female chant.
+  A set of music about waiting. Inspired by Candlemas — held every February 2nd — which commemorates this night from the Gospel of Luke: an old prophet, who had kept watch in the Temple all his life, finally takes a swaddled infant from a mother's arms, and speaks the prayer that has been sung for two thousand years — *"Lord, now you let your servant depart in peace, according to your word, for my eyes have seen your salvation."* The five movements trace the arc of that night.
+
+  The skeleton is medieval Gregorian chant — male monophonic voice, the echo between candlelit stone walls — but it weaves in the approach of the modern ensemble Gregorian, slipping a contemporary breath into the strict frame; the female voices (the Mother and the prophetess) draw on Enya and the ethereal half-whispered chant of Celtic music. **No percussion, no electronic instruments, a slow tempo, a deep night — it doesn't compete for your attention; it simply keeps the candle lit a little longer.**
 linerEn: |
   ## The Story Behind It
 
