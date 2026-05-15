@@ -23,27 +23,18 @@ const songsWithBase = album.data.songs.map((s) => ({
   lrc: s.lrc ? withBase(s.lrc) : s.lrc,
 }));
 
-const hasEn = Boolean(album.data.descriptionEn || album.data.linerEn);
 const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
 ---
 
 <BaseLayout title={`${album.data.title} · JiangJingyi`} description={album.data.subtitle}>
   <style is:inline set:html={`:root { --page-accent: ${album.data.accentColor}; --page-bg: ${album.data.bgColor}; }`}></style>
-  <article class="max-w-6xl mx-auto" data-active-lang="zh" id="album-root">
-    <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
-      <a
-        href={withBase('/')}
-        class="inline-block text-sm text-ochre/70 hover:text-candle font-mono tracking-widest"
-      >
-        ← BACK TO ALBUMS
-      </a>
-      {hasEn && (
-        <div class="lang-toggle flex border border-brass/40 text-xs font-mono tracking-widest">
-          <button data-lang-btn="zh" class="px-3 py-1.5 transition-colors">中文</button>
-          <button data-lang-btn="en" class="px-3 py-1.5 transition-colors border-l border-brass/40">EN</button>
-        </div>
-      )}
-    </div>
+  <article class="max-w-6xl mx-auto" id="album-root">
+    <a
+      href={withBase('/')}
+      class="inline-block mb-6 text-sm text-ochre/70 hover:text-candle font-mono tracking-widest"
+    >
+      ← BACK TO ALBUMS
+    </a>
 
     <header class="mb-8">
       <p class="font-mono text-xs tracking-widest text-ochre/70 mb-2">
@@ -71,11 +62,11 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
     {album.data.description && (
       <section class="mb-10">
         <h2 class="font-display text-sm tracking-[0.3em] text-ochre mb-4">⟁ ABOUT ⟁</h2>
-        <div data-lang="zh" class="text-parchment/80 leading-relaxed whitespace-pre-line font-body text-lg">
+        <div class="text-parchment/85 leading-relaxed font-body text-lg">
           {album.data.description}
         </div>
         {album.data.descriptionEn && (
-          <div data-lang="en" class="text-parchment/80 leading-relaxed whitespace-pre-line font-body text-lg">
+          <div class="text-parchment/65 leading-relaxed font-body italic mt-4">
             {album.data.descriptionEn}
           </div>
         )}
@@ -86,82 +77,55 @@ const linerEnHtml = album.data.linerEn ? marked.parse(album.data.linerEn) : '';
 
     <section class="prose-liner">
       <h2 class="font-display text-sm tracking-[0.3em] text-ochre mb-4">⟁ LINER NOTES ⟁</h2>
-      <div data-lang="zh" class="text-parchment/80 leading-loose font-body">
+      <div class="text-parchment/85 leading-loose font-body">
         <Content />
       </div>
       {linerEnHtml && (
-        <div data-lang="en" class="text-parchment/80 leading-loose font-body" set:html={linerEnHtml} />
+        <>
+          <div class="my-12 flex items-center gap-4">
+            <div class="flex-1 h-px bg-brass/30"></div>
+            <span class="font-mono text-xs tracking-[0.4em] text-ochre/60">ENGLISH</span>
+            <div class="flex-1 h-px bg-brass/30"></div>
+          </div>
+          <div class="liner-en text-parchment/75 leading-loose font-body" set:html={linerEnHtml} />
+        </>
       )}
     </section>
   </article>
 
   <style is:global>
-    /* 默认 hide en, show zh; data-active-lang 切换时翻转 */
-    #album-root[data-active-lang="zh"] [data-lang="en"] { display: none; }
-    #album-root[data-active-lang="en"] [data-lang="zh"] { display: none; }
-
-    /* 切换按钮选中态 */
-    #album-root[data-active-lang="zh"] .lang-toggle [data-lang-btn="zh"],
-    #album-root[data-active-lang="en"] .lang-toggle [data-lang-btn="en"] {
-      background: var(--page-accent, #c9a35a);
-      color: #0b0a08;
-    }
-    .lang-toggle button:hover {
-      background: color-mix(in srgb, var(--page-accent, #c9a35a) 18%, transparent);
-    }
-
-    /* EN liner notes 由 marked 渲染成纯 HTML, 给它一些基础 prose 样式以匹配 ZH */
-    #album-root [data-lang="en"] h2 {
+    /* 英文 liner notes 由 marked 渲染, 给它跟中文一致的排版风格 */
+    #album-root .liner-en h2 {
       font-family: 'Cinzel', 'Trajan Pro', serif;
       color: var(--page-accent, #c9a35a);
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       letter-spacing: 0.04em;
       margin-top: 2rem;
       margin-bottom: 0.75rem;
     }
-    #album-root [data-lang="en"] p {
+    #album-root .liner-en p {
       margin-bottom: 1rem;
     }
-    #album-root [data-lang="en"] blockquote {
+    #album-root .liner-en blockquote {
       border-left: 2px solid var(--page-accent, #c9a35a);
       padding-left: 1rem;
       margin: 1rem 0;
-      color: rgba(230, 220, 198, 0.9);
+      color: rgba(230, 220, 198, 0.85);
       font-style: italic;
     }
-    #album-root [data-lang="en"] ul {
+    #album-root .liner-en ul {
       padding-left: 1.5rem;
       list-style: disc;
       margin-bottom: 1rem;
     }
-    #album-root [data-lang="en"] ul li {
+    #album-root .liner-en ul li {
       margin-bottom: 0.5rem;
     }
-    #album-root [data-lang="en"] strong {
+    #album-root .liner-en strong {
       color: rgba(255, 255, 255, 0.95);
     }
-    #album-root [data-lang="en"] em {
+    #album-root .liner-en em {
       color: rgba(230, 220, 198, 1);
     }
   </style>
-
-  <script>
-    const root = document.getElementById('album-root');
-    if (root) {
-      const KEY = 'album-lang';
-      const stored = localStorage.getItem(KEY);
-      if (stored === 'en' || stored === 'zh') {
-        root.dataset.activeLang = stored;
-      }
-      root.querySelectorAll('[data-lang-btn]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const lang = (btn as HTMLElement).dataset.langBtn;
-          if (lang === 'zh' || lang === 'en') {
-            root.dataset.activeLang = lang;
-            localStorage.setItem(KEY, lang);
-          }
-        });
-      });
-    }
-  </script>
 </BaseLayout>
