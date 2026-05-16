@@ -108,9 +108,16 @@ const publishPlugin = {
   },
 };
 
+// 部署目标判定:
+//   - DEPLOY_TARGET=zeabur  → 部署到 Zeabur 子域 (根路径)
+//   - 其他 / 未设           → 默认 GitHub Pages 项目页 (/lumen-records/)
+const isZeabur = process.env.DEPLOY_TARGET === 'zeabur';
+
 export default defineConfig({
-  site: 'https://jiangjingyi496.github.io',
-  base: '/lumen-records/',
+  site: isZeabur
+    ? (process.env.PUBLIC_SITE_URL || 'https://lumen-records.zeabur.app')
+    : 'https://jiangjingyi496.github.io',
+  base: isZeabur ? '/' : '/lumen-records/',
   integrations: [tailwind()],
   vite: {
     plugins: [lrcSaverPlugin, publishPlugin],
