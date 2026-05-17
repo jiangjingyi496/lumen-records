@@ -6,47 +6,73 @@ import { withBase } from '../lib/path';
 const albums = (await getCollection('albums')).sort(
   (a, b) => b.data.year - a.data.year,
 );
+
+// 网格响应实际专辑数量：≤2 显示 2 列，3 张 3 列，4+ 张满 4 列
+const gridClass =
+  albums.length <= 2
+    ? 'grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto'
+    : albums.length === 3
+    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
+    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4';
 ---
 
-<BaseLayout title="JiangJingyi · Music">
-  <section class="text-center mb-16">
-    <h1 class="font-display text-5xl md:text-6xl text-goldleaf text-shadow-candle mb-4 tracking-wider">
-      MUSICA SACRA
+<BaseLayout title="Juniper Jing · Stella Matutina">
+  {/* Hero · Stella Matutina */}
+  <section class="text-center mb-20 md:mb-24 pt-4">
+    <h1 class="font-display text-3xl md:text-5xl lg:text-6xl text-junipergold tracking-[0.2em] mb-5 leading-tight">
+      STELLA MATUTINA
     </h1>
-    <p class="font-body italic text-ochre text-lg max-w-2xl mx-auto">
-      Personal liturgical & contemplative works · Produced with SUNO ·
-      个人音乐作品集
+    <p class="font-body italic text-goldleaf/85 text-lg md:text-xl tracking-wider mb-2">
+      Medieval Troubadour · Celtic Folk · Gregorian Chant
     </p>
-    <div class="divider-ornate w-48 mx-auto mt-6"></div>
+    <p class="text-parchment/70 text-base md:text-lg font-body italic max-w-2xl mx-auto">
+      晨星 · 中世纪游吟诗人、凯尔特民谣、格里高利圣咏 · 个人创作分享
+    </p>
+    <div class="flex items-center justify-center gap-4 mt-7">
+      <span class="h-px bg-goldleaf/40 w-16 md:w-24"></span>
+      <span class="text-goldleaf/60 text-xs tracking-[0.3em]">⋆ MUSIC · SACRA ⋆</span>
+      <span class="h-px bg-goldleaf/40 w-16 md:w-24"></span>
+    </div>
   </section>
 
-  <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+  {/* 专辑网格 · 响应专辑数量自适应列数 */}
+  <section class={`grid ${gridClass} gap-6 md:gap-8`}>
     {
       albums.map((album) => (
         <a
           href={withBase(`/albums/${album.id}/`)}
-          class="group block border border-brass/30 hover:border-goldleaf transition-all duration-300 p-6 bg-black/20 backdrop-blur-sm"
+          class="group block border border-goldleaf/20 hover:border-goldleaf/60 transition-all duration-500 p-5 bg-black/30 backdrop-blur-sm hover:bg-black/40"
         >
-          <div class="aspect-square overflow-hidden mb-5 border border-brass/20">
+          <div class="aspect-square overflow-hidden mb-5 border border-goldleaf/10">
             <img
               src={withBase(album.data.cover)}
               alt={album.data.title}
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>
-          <h2 class="font-display text-2xl text-goldleaf mb-2 group-hover:text-candle transition-colors">
+          <h2 class="font-display text-xl md:text-2xl text-goldleaf mb-2 group-hover:text-junipergold transition-colors tracking-wider leading-snug">
             {album.data.title}
           </h2>
           {album.data.subtitle && (
-            <p class="font-body italic text-ochre text-sm leading-relaxed">
+            <p class="font-body italic text-ochre/80 text-sm leading-relaxed">
               {album.data.subtitle}
             </p>
           )}
-          <p class="text-parchment/60 text-xs mt-3 font-mono tracking-widest">
+          <p class="text-parchment/40 text-xs mt-4 font-mono tracking-[0.25em]">
             {album.data.year} · {album.data.songs.length} TRACKS
           </p>
         </a>
       ))
     }
+  </section>
+
+  {/* Footer divider tag · 仿 Lovart "MUSIC SACRA" 风格 */}
+  <section class="text-center mt-20">
+    <div class="flex items-center justify-center gap-4">
+      <span class="h-px bg-goldleaf/30 flex-1 max-w-[200px]"></span>
+      <span class="text-goldleaf/50 text-[10px] tracking-[0.4em] uppercase font-display">Et lux in tenebris lucet</span>
+      <span class="h-px bg-goldleaf/30 flex-1 max-w-[200px]"></span>
+    </div>
+    <p class="text-parchment/30 text-xs mt-2 font-body italic">"光在黑暗中照耀"</p>
   </section>
 </BaseLayout>

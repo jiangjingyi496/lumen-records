@@ -10,3 +10,9 @@ npm-debug.log*
 .dev-server.err
 .vscode/
 .idea/
+
+# Claude Code 本地配置
+.claude/
+
+# 音乐发行投递包（给网易云/QQ 音乐用，不属于网站静态资源）
+release-package/
