@@ -17,19 +17,20 @@ const gridClass =
 ---
 
 <BaseLayout title="Juniper Jing · Stella Matutina">
-  {/* Hero · Stella Matutina · 带星空背景 */}
+  {/* 全屏星河背景层 (仅首页) — fixed 跟随视口, 比 body::after 还低一层让两层叠加 */}
+  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <img
+      src={withBase('/textures/starry-sky.png')}
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover opacity-90"
+    />
+    {/* 上下两端做一层柔和 vignette, 让正文和 hero 文字读得清楚, 但不把星河整体压死 */}
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/50 via-ink/15 to-ink/70"></div>
+  </div>
+
+  {/* Hero · Stella Matutina */}
   <section class="relative text-center mb-20 md:mb-24 py-16 md:py-24 overflow-hidden">
-    {/* 星空背景层: 满宽溢出 + 软渐变压暗 + 底部 fade-out 到页面色 */}
-    <div class="absolute -inset-x-[calc((100vw-100%)/2)] inset-y-0 -z-10 overflow-hidden">
-      <img
-        src={withBase('/textures/starry-sky.png')}
-        alt=""
-        aria-hidden="true"
-        class="absolute inset-0 w-full h-full object-cover opacity-55"
-      />
-      <div class="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/40 to-ink"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-ink/55 via-transparent to-ink/55"></div>
-    </div>
 
     <h1 class="font-display text-3xl md:text-5xl lg:text-6xl text-junipergold tracking-[0.2em] mb-5 leading-tight">
       STELLA MATUTINA

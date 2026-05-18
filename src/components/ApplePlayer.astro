@@ -393,17 +393,17 @@ const songData = songs.map((s, i) => ({
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 420px minmax(0, 540px);
-    justify-content: center;
-    gap: 48px;
-    padding: 48px 48px 36px;
+    /* 左列(封面+曲目列表)更宽,右列(歌词)填满剩余空间贴右 */
+    grid-template-columns: 500px 1fr;
+    gap: 56px;
+    padding: 40px 40px 28px;
   }
 
   /* === LEFT: cover + controls === */
   .player-left {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
   }
 
   .cover-wrap {
@@ -514,8 +514,9 @@ const songData = songs.map((s, i) => ({
     align-items: center;
     justify-content: center;
     gap: 24px;
-    /* 用负 margin 把 SVG 自身的透明 padding 折叠掉, 让控件看起来紧贴上下两段 */
-    margin: -18px 0;
+    /* 用大负 margin 把 SVG 自身的透明 padding 折叠掉 (SVG viewBox 自带约 22-32px 上下空白),
+       这样进度条和曲目列表就紧贴控件了 */
+    margin: -34px 0;
   }
 
   .ctrl {
@@ -566,7 +567,8 @@ const songData = songs.map((s, i) => ({
 
   .track-row {
     display: grid;
-    grid-template-columns: 28px 1fr auto;
+    /* 第一列要装下 "♪ 01" 不换行, 28px 太窄会把 ♪ 顶到第二行 */
+    grid-template-columns: 46px 1fr auto;
     gap: 12px;
     align-items: center;
     background: none;
@@ -598,6 +600,7 @@ const songData = songs.map((s, i) => ({
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
     opacity: 0.7;
+    white-space: nowrap;
   }
 
   .track-name {
