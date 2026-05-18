@@ -68,14 +68,14 @@ const songData = songs.map((s, i) => ({
 
       <div class="controls">
         <button class="ctrl" data-action="prev" aria-label="Previous">
-          <img src={withBase('/brand/icons/icon-prev.svg')} alt="Previous" class="ctrl-icon" />
+          <img src={withBase('/brand/icons/ctl-prev.svg')} alt="Previous" class="ctrl-icon" />
         </button>
         <button class="ctrl ctrl-play" data-action="toggle" aria-label="Play/Pause">
-          <img class="icon-play" src={withBase('/brand/icons/icon-play.svg')} alt="Play" />
-          <img class="icon-pause" src={withBase('/brand/icons/icon-pause.svg')} alt="Pause" style="display:none" />
+          <img class="icon-play" src={withBase('/brand/icons/ctl-play.svg')} alt="Play" />
+          <img class="icon-pause" src={withBase('/brand/icons/ctl-pause.svg')} alt="Pause" style="display:none" />
         </button>
         <button class="ctrl" data-action="next" aria-label="Next">
-          <img src={withBase('/brand/icons/icon-next.svg')} alt="Next" class="ctrl-icon" />
+          <img src={withBase('/brand/icons/ctl-next.svg')} alt="Next" class="ctrl-icon" />
         </button>
       </div>
 
@@ -513,10 +513,10 @@ const songData = songs.map((s, i) => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 24px;
-    /* 用大负 margin 把 SVG 自身的透明 padding 折叠掉 (SVG viewBox 自带约 22-32px 上下空白),
-       这样进度条和曲目列表就紧贴控件了 */
-    margin: -34px 0;
+    gap: 28px;
+    /* SVG viewBox 自带约 33% 上下透明 padding, 放大尺寸后这层 padding 也跟着等比放大,
+       所以负 margin 也得跟着加深, 保持视觉上的上下间距不变. */
+    margin: -41px 0;
   }
 
   .ctrl {
@@ -540,21 +540,21 @@ const songData = songs.map((s, i) => ({
     filter: brightness(0.9);
   }
 
-  /* prev / next 的 icon 大小 */
+  /* prev / next 的 icon 大小 (放大一号: 64 → 80) */
   .ctrl-icon {
-    width: 64px;
-    height: 64px;
+    width: 80px;
+    height: 80px;
     display: block;
   }
 
-  /* 中央的播放/暂停按钮 icon */
+  /* 中央的播放/暂停按钮 icon (放大一号: 96 → 120) */
   .ctrl-play {
     padding: 0;
   }
   .ctrl-play .icon-play,
   .ctrl-play .icon-pause {
-    width: 96px;
-    height: 96px;
+    width: 120px;
+    height: 120px;
     display: block;
   }
 
