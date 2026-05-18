@@ -188,3 +188,115 @@
 .text-shadow-candle {
   text-shadow: 0 0 24px rgba(244, 214, 138, 0.4);
 }
+
+/* ============ 金色铭牌按钮 (rectangular plate + circle counterpart) ============ */
+
+/* 长方形铭牌按钮: 用用户提供的 PNG 当背景 */
+.btn-plate {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 36px;
+  min-width: 140px;
+  font-family: 'Cinzel', 'Trajan Pro', serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: #3a2810;
+  background-color: transparent;
+  background-image: url('/lumen-records/brand/button-plate.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  text-shadow:
+    0 1px 0 rgba(255, 240, 200, 0.45),
+    0 -1px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 180ms ease, filter 180ms ease;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+  white-space: nowrap;
+}
+
+.btn-plate:hover {
+  filter: drop-shadow(0 6px 10px rgba(201, 163, 90, 0.45)) brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.btn-plate:active {
+  transform: translateY(0);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) brightness(0.95);
+}
+
+.btn-plate:disabled,
+.btn-plate[disabled] {
+  filter: grayscale(0.6) brightness(0.65);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 紧凑版 (字短时不要太胖) */
+.btn-plate-sm {
+  padding: 9px 22px;
+  min-width: 100px;
+  font-size: 11px;
+}
+
+/* 圆形铭牌按钮: 用 CSS 复现 PNG 的渐变 + 边缘金箍 */
+.btn-plate-circle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid #6b4a1c;
+  cursor: pointer;
+  /* 金色铭牌渐变: 左上偏亮, 右下偏暗 */
+  background:
+    radial-gradient(circle at 30% 28%, #f5e4b0 0%, #e8c878 35%, #c89a48 70%, #a07832 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 215, 0.6),  /* 上沿高光 */
+    inset 0 -2px 4px rgba(80, 50, 10, 0.4),   /* 下沿凹陷 */
+    0 4px 8px rgba(0, 0, 0, 0.45),            /* 投影 */
+    0 0 0 2px rgba(106, 74, 28, 0.3);         /* 外圈第二条金线 */
+  color: #3a2810;
+  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+}
+
+.btn-plate-circle:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 215, 0.7),
+    inset 0 -2px 4px rgba(80, 50, 10, 0.4),
+    0 6px 12px rgba(201, 163, 90, 0.5),
+    0 0 0 2px rgba(106, 74, 28, 0.4);
+}
+
+.btn-plate-circle:active {
+  transform: translateY(0);
+  filter: brightness(0.92);
+  box-shadow:
+    inset 0 2px 4px rgba(80, 50, 10, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-plate-circle.btn-plate-circle-lg {
+  width: 78px;
+  height: 78px;
+}
+
+.btn-plate-circle.btn-plate-circle-sm {
+  width: 48px;
+  height: 48px;
+}
+
+/* 圆形按钮里的 SVG icon */
+.btn-plate-circle svg {
+  fill: currentColor !important;
+  width: 50%;
+  height: 50%;
+  filter: drop-shadow(0 1px 0 rgba(255, 240, 200, 0.35));
+}

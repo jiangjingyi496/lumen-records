@@ -59,15 +59,15 @@ const lrcUrl = withBase(song.lrc);
         <h1 class="font-display text-2xl md:text-3xl text-goldleaf mt-2">{song.title}</h1>
         <p class="text-sm text-parchment/60 italic">{album.title} · {album.artist}</p>
       </div>
-      <div class="flex gap-2 flex-wrap">
-        <button id="btn-tap-mode" class="px-4 py-2 border border-brass text-candle font-mono text-sm hover:bg-candle/10">
+      <div class="flex gap-3 flex-wrap">
+        <button id="btn-tap-mode" class="btn-plate btn-plate-sm">
           TAP MODE: OFF
         </button>
-        <button id="btn-save" class="px-4 py-2 bg-candle text-ink font-mono text-sm hover:bg-goldleaf">
-          💾 SAVE LRC
+        <button id="btn-save" class="btn-plate">
+          SAVE LRC
         </button>
-        <button id="btn-publish" class="px-4 py-2 border border-goldleaf text-goldleaf font-mono text-sm hover:bg-goldleaf hover:text-ink" title="git add + commit + push 到 GitHub,自动重新部署到官网">
-          🚀 PUBLISH
+        <button id="btn-publish" class="btn-plate" title="git add + commit + push 到 GitHub,自动重新部署到官网">
+          PUBLISH
         </button>
       </div>
     </header>
@@ -238,7 +238,7 @@ const lrcUrl = withBase(song.lrc);
         btnSaveEl.style.opacity = '0.4';
         btnSaveEl.style.cursor = 'not-allowed';
         btnSaveEl.title = '只读模式: 请在本地 dev server 上调音';
-        btnSaveEl.textContent = '🔒 只读 · READ-ONLY';
+        btnSaveEl.textContent = 'READ ONLY';
       }
     }
 
@@ -280,7 +280,7 @@ const lrcUrl = withBase(song.lrc);
       dirty = d;
       // 只读模式下按钮文字锁死, 不被脏标记覆盖
       if (!IS_LOCAL) return;
-      (btnSave as HTMLButtonElement).textContent = d ? '💾 SAVE LRC *' : '💾 SAVE LRC';
+      (btnSave as HTMLButtonElement).textContent = d ? 'SAVE LRC ·' : 'SAVE LRC';
     }
 
     function render() {
@@ -365,7 +365,7 @@ const lrcUrl = withBase(song.lrc);
 
     function setTapMode(on: boolean) {
       tapMode = on;
-      btnTap.textContent = on ? 'TAP MODE: ON  (T 标记)' : 'TAP MODE: OFF';
+      btnTap.textContent = on ? 'TAP MODE: ON' : 'TAP MODE: OFF';
       btnTap.classList.toggle('bg-candle', on);
       btnTap.classList.toggle('text-ink', on);
       updateActiveRow();
@@ -479,7 +479,7 @@ const lrcUrl = withBase(song.lrc);
         }
         const originalText = btnPublish.textContent;
         btnPublish.disabled = true;
-        btnPublish.textContent = '⏳ 发布中…';
+        btnPublish.textContent = 'PUBLISHING…';
         setStatus('git add + commit + push 中…');
         try {
           const r = await fetch('/api/publish', { method: 'POST' });
