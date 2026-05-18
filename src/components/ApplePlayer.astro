@@ -519,12 +519,11 @@ const songData = songs.map((s, i) => ({
   .controls {
     display: flex;
     align-items: center;
-    /* space-between: prev 左边缘 / next 右边缘对齐 progress bar 两端 */
+    /* space-between: prev / next 对齐到 progress bar 两端;
+       padding 0 5px 让 prev 往右挪 5、next 往左挪 5, 各往中间靠. */
     justify-content: space-between;
     gap: 0;
-    /* 120px play 的 halo ≈ 40px / side, -28 留 12px halo + player-left gap=24
-       → 控件到 progress bar / tracks 上下各 ~36px 视觉间距, 跟横向 70px gap
-       (space-between 自然产生) 配合, 整体节奏不松不紧 */
+    padding: 0 5px;
     margin: -28px 0;
   }
 
@@ -549,9 +548,9 @@ const songData = songs.map((s, i) => ({
     filter: brightness(0.9);
   }
 
-  /* 控件按钮: prev/next 80, play 120 (1.5× 内部比例).
-     space-between 在 420 左列里: 80+120+80 = 280, 两端 0 边距,
-     icon 之间自然留 70px gap, 视觉上不挤. */
+  /* 控件按钮: prev/next 80 (不变), play 120 → 144 (×1.2).
+     space-between 在 420 左列里, 配合 .controls padding 0 5px, prev / next
+     各往中间挪 5px. */
   .ctrl-icon {
     width: 80px;
     height: 80px;
@@ -563,8 +562,8 @@ const songData = songs.map((s, i) => ({
   }
   .ctrl-play .icon-play,
   .ctrl-play .icon-pause {
-    width: 120px;
-    height: 120px;
+    width: 144px;
+    height: 144px;
     display: block;
   }
 
@@ -739,19 +738,19 @@ const songData = songs.map((s, i) => ({
     .player-right {
       min-height: 400px;
     }
-    /* 移动端控件略缩, 适应单列视觉权重 */
+    /* 移动端控件略缩; play/pause 跟桌面同步 ×1.2 (96 → 116) */
     .ctrl-icon {
       width: 64px;
       height: 64px;
     }
     .ctrl-play .icon-play,
     .ctrl-play .icon-pause {
-      width: 96px;
-      height: 96px;
+      width: 116px;
+      height: 116px;
     }
     .controls {
       gap: 0;
-      /* 96px play 的 halo ≈ 32px / side; -22 留 10px halo */
+      padding: 0 5px;
       margin: -22px 0;
     }
     :global(.player-shell .lyric-line .lyric-en) {
