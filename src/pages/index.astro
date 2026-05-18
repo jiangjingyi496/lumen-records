@@ -22,15 +22,15 @@ const gridClass =
     <h1 class="font-display text-3xl md:text-5xl lg:text-6xl text-junipergold tracking-[0.2em] mb-5 leading-tight">
       STELLA MATUTINA
     </h1>
-    <p class="font-body italic text-goldleaf/85 text-lg md:text-xl tracking-wider mb-2">
+    <p class="font-body italic text-goldleaf/85 text-xl md:text-2xl tracking-wider mb-3">
       Medieval Troubadour · Celtic Folk · Gregorian Chant
     </p>
-    <p class="text-parchment/70 text-base md:text-lg font-body italic max-w-2xl mx-auto">
+    <p class="text-parchment/75 text-lg md:text-xl font-body italic max-w-2xl mx-auto">
       晨星 · 中世纪游吟诗人、凯尔特民谣、格里高利圣咏 · 个人创作分享
     </p>
-    <div class="flex items-center justify-center gap-4 mt-7">
+    <div class="flex items-center justify-center gap-4 mt-8">
       <span class="h-px bg-goldleaf/40 w-16 md:w-24"></span>
-      <span class="text-goldleaf/60 text-xs tracking-[0.3em]">⋆ MUSIC · SACRA ⋆</span>
+      <span class="text-goldleaf/65 text-sm tracking-[0.3em]">⋆ MUSIC · SACRA ⋆</span>
       <span class="h-px bg-goldleaf/40 w-16 md:w-24"></span>
     </div>
   </section>
@@ -54,11 +54,11 @@ const gridClass =
             {album.data.title}
           </h2>
           {album.data.subtitle && (
-            <p class="font-body italic text-ochre/80 text-sm leading-relaxed">
+            <p class="font-body italic text-ochre/85 text-base leading-relaxed">
               {album.data.subtitle}
             </p>
           )}
-          <p class="text-parchment/40 text-xs mt-4 font-mono tracking-[0.25em]">
+          <p class="text-parchment/50 text-sm mt-4 font-mono tracking-[0.25em]">
             {album.data.year} · {album.data.songs.length} TRACKS
           </p>
         </a>
@@ -70,9 +70,9 @@ const gridClass =
   <section class="text-center mt-20">
     <div class="flex items-center justify-center gap-4">
       <span class="h-px bg-goldleaf/30 flex-1 max-w-[200px]"></span>
-      <span class="text-goldleaf/50 text-[10px] tracking-[0.4em] uppercase font-display">Et lux in tenebris lucet</span>
+      <span class="text-goldleaf/60 text-xs md:text-sm tracking-[0.4em] uppercase font-display">Et lux in tenebris lucet</span>
       <span class="h-px bg-goldleaf/30 flex-1 max-w-[200px]"></span>
     </div>
-    <p class="text-parchment/30 text-xs mt-2 font-body italic">"光在黑暗中照耀"</p>
+    <p class="text-parchment/45 text-sm mt-3 font-body italic">"光在黑暗中照耀"</p>
   </section>
 </BaseLayout>
