@@ -405,8 +405,9 @@ const songData = songs.map((s, i) => ({
   .player-left {
     display: flex;
     flex-direction: column;
-    /* 所有左列模块统一这一个 gap, 不再各处叠 margin-top, 节奏稳定 */
-    gap: 28px;
+    /* 所有左列模块统一这一个 gap, 不再各处叠 margin-top, 节奏稳定.
+       控件缩小后整列变短, 这里也跟着收一档 28 → 24 */
+    gap: 24px;
   }
 
   .cover-wrap {
@@ -518,11 +519,11 @@ const songData = songs.map((s, i) => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 24px;
-    /* SVG viewBox 上下各自带约 33% 透明 padding (在 144px play 上 ≈ 48px halo
-       per side). margin -28 折掉大部分但有意留一点, 配合 player-left gap=28
-       形成均衡的视觉上下间距, 同时不让按钮显得孤立悬浮. */
-    margin: -28px 0;
+    gap: 14px;
+    /* 控件按钮减半后 (play 72), SVG halo 也减半 ≈ 24px per side.
+       margin -14 等比例折掉大部分, 留 ~10px halo + player-left gap=24
+       撑出节奏感. */
+    margin: -14px 0;
   }
 
   .ctrl {
@@ -546,14 +547,14 @@ const songData = songs.map((s, i) => ({
     filter: brightness(0.9);
   }
 
-  /* 控件按钮重新定比例:
-     - prev/next: 96px, play/pause: 144px (1.5× 比例, 标准音乐 app 用法)
-     - 在 420 左列里横排: 96+24+144+24+96 = 384, 留 36px 边距居中
-     - 视觉 glyph (扣掉 SVG 透明 halo) 大约: prev/next 32px, play 48px,
-       视觉比例同样 1.5×, 看着平衡 */
+  /* 控件按钮整体缩小一倍 (halve):
+     - prev/next: 96 → 48px
+     - play/pause: 144 → 72px
+     - 1.5× 比例不变, 在 420 左列里横排: 48+14+72+14+48 = 196, 居中留充足边距
+     - 视觉 glyph 约 prev/next 16px, play 24px, 比例同样 1.5× */
   .ctrl-icon {
-    width: 96px;
-    height: 96px;
+    width: 48px;
+    height: 48px;
     display: block;
   }
 
@@ -562,8 +563,8 @@ const songData = songs.map((s, i) => ({
   }
   .ctrl-play .icon-play,
   .ctrl-play .icon-pause {
-    width: 144px;
-    height: 144px;
+    width: 72px;
+    height: 72px;
     display: block;
   }
 
@@ -738,19 +739,19 @@ const songData = songs.map((s, i) => ({
     .player-right {
       min-height: 400px;
     }
-    /* 移动端控件收一档, 跟单列封面取得平衡 */
+    /* 移动端控件跟桌面同步缩小一倍 */
     .ctrl-icon {
-      width: 72px;
-      height: 72px;
+      width: 40px;
+      height: 40px;
     }
     .ctrl-play .icon-play,
     .ctrl-play .icon-pause {
-      width: 108px;
-      height: 108px;
+      width: 60px;
+      height: 60px;
     }
     .controls {
-      gap: 16px;
-      margin: -22px 0;
+      gap: 12px;
+      margin: -12px 0;
     }
     :global(.player-shell .lyric-line .lyric-en) {
       font-size: 17px;
