@@ -33,20 +33,20 @@ const descriptionEnHtml = album.data.descriptionEn ? marked.parse(album.data.des
   <article class="max-w-6xl mx-auto" id="album-root">
     <a
       href={withBase('/')}
-      class="inline-block mb-6 text-sm text-ochre/70 hover:text-candle font-mono tracking-widest"
+      class="inline-block mb-6 text-lg text-ochre/70 hover:text-candle font-mono tracking-widest"
     >
       ← BACK TO ALBUMS
     </a>
 
     <header class="mb-8">
-      <p class="font-mono text-xs tracking-widest text-ochre/70 mb-2">
+      <p class="font-mono text-base tracking-widest text-ochre/70 mb-2">
         {album.data.year} · {album.data.artist}
       </p>
       <h1 class="font-display text-3xl md:text-5xl text-goldleaf text-shadow-candle mb-2 leading-tight">
         {album.data.title}
       </h1>
       {album.data.subtitle && (
-        <p class="font-body italic text-ochre text-lg leading-relaxed">{album.data.subtitle}</p>
+        <p class="font-body italic text-ochre text-2xl leading-relaxed">{album.data.subtitle}</p>
       )}
     </header>
 
