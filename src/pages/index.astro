@@ -17,28 +17,17 @@ const gridClass =
 ---
 
 <BaseLayout title="Juniper Jing · Stella Matutina">
-  {/* 首页专属: 把全局 body::after (本来只是烛光高光) 改成星河 + 蒙版.
-     body::after 本身就是 position:fixed + z:-1, 自带"固定在视口/正文滚动叠在上面"
-     的特性. 之前嵌在 <main> 里那个 -z-10 div 被 body::after 和 body 自身覆盖,
-     星空几乎看不见, 直接换到这里更靠谱. */}
-  <style is:global define:vars={{ starUrl: `url('${withBase('/textures/starry-sky.png')}')` }}>
+  {/* 调试: 先把蒙层完全拿掉, URL 直接嵌进 CSS (不走 define:vars, 因为它把变量
+     挂到子元素 style 上, body::after 拿不到), 验证星河能否露脸. 如果这版能看到,
+     再加蒙版回来. */}
+  <style is:global set:html={`
     body::after {
-      /* 第一层: 黑色蒙版渐变 (上端略深给 hero 文字底气, 中段最浅让星河露出来,
-         下端再深一点保护后续正文与卡片). 第二层: 星河本体, cover 满铺. */
-      background-image:
-        linear-gradient(
-          180deg,
-          rgba(11, 10, 8, 0.62) 0%,
-          rgba(11, 10, 8, 0.40) 28%,
-          rgba(11, 10, 8, 0.40) 72%,
-          rgba(11, 10, 8, 0.72) 100%
-        ),
-        var(--starUrl) !important;
-      background-size: 100% 100%, cover !important;
-      background-position: center, center !important;
-      background-repeat: no-repeat, no-repeat !important;
+      background-image: url('${withBase('/textures/starry-sky.png')}') !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
     }
-  </style>
+  `}></style>
 
   {/* Hero · Stella Matutina */}
   <section class="relative text-center mb-20 md:mb-24 py-16 md:py-24 overflow-hidden">
