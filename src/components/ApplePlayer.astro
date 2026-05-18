@@ -411,11 +411,9 @@ const songData = songs.map((s, i) => ({
   }
 
   .cover-wrap {
-    /* 封面缩小到左列一半 (560 / 2 = 280), 在左列内水平居中.
-       其他模块 (meta / progress / controls / tracks) 还是按 560 全宽. */
+    /* 封面 = 左列全宽 = 420×420. 不再 max-width 锁定 + auto 居中(那是上一版
+       左列 640 时为了让封面不被拉大而打的补丁, 现在左列收回 420 就不需要了) */
     width: 100%;
-    max-width: 280px;
-    margin: 0 auto;
     aspect-ratio: 1 / 1;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
     border-radius: 6px;
