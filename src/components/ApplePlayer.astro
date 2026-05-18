@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../lib/path';
+
 interface Song {
   title: string;
   audio: string;
@@ -65,23 +67,15 @@ const songData = songs.map((s, i) => ({
       </div>
 
       <div class="controls">
-        <button class="btn-plate-circle btn-plate-circle-sm" data-action="prev" aria-label="Previous">
-          <svg viewBox="0 0 24 24">
-            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
-          </svg>
+        <button class="ctrl" data-action="prev" aria-label="Previous">
+          <img src={withBase('/brand/icons/icon-prev.svg')} alt="Previous" class="ctrl-icon" />
         </button>
-        <button class="btn-plate-circle btn-plate-circle-lg" data-action="toggle" aria-label="Play/Pause">
-          <svg class="icon-play" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-          <svg class="icon-pause" viewBox="0 0 24 24" style="display:none">
-            <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
-          </svg>
+        <button class="ctrl ctrl-play" data-action="toggle" aria-label="Play/Pause">
+          <img class="icon-play" src={withBase('/brand/icons/icon-play.svg')} alt="Play" />
+          <img class="icon-pause" src={withBase('/brand/icons/icon-pause.svg')} alt="Pause" style="display:none" />
         </button>
-        <button class="btn-plate-circle btn-plate-circle-sm" data-action="next" aria-label="Next">
-          <svg viewBox="0 0 24 24">
-            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
-          </svg>
+        <button class="ctrl" data-action="next" aria-label="Next">
+          <img src={withBase('/brand/icons/icon-next.svg')} alt="Next" class="ctrl-icon" />
         </button>
       </div>
 
@@ -521,31 +515,40 @@ const songData = songs.map((s, i) => ({
   .ctrl {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.85);
     cursor: pointer;
-    padding: 8px;
-    transition: color 200ms ease, transform 200ms ease;
-  }
-
-  .ctrl:hover {
-    color: var(--accent);
-  }
-
-  .ctrl-play {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 200ms ease, filter 200ms ease;
   }
 
-  .ctrl-play:hover {
-    background: var(--accent);
-    color: var(--bg-color);
-    transform: scale(1.05);
+  .ctrl:hover {
+    filter: brightness(1.15) drop-shadow(0 0 6px rgba(231, 207, 162, 0.4));
+    transform: translateY(-1px);
+  }
+
+  .ctrl:active {
+    transform: translateY(0);
+    filter: brightness(0.9);
+  }
+
+  /* prev / next 的 icon 大小 */
+  .ctrl-icon {
+    width: 36px;
+    height: 36px;
+    display: block;
+  }
+
+  /* 中央的播放/暂停按钮的 icon (略大) */
+  .ctrl-play {
+    padding: 8px;
+  }
+  .ctrl-play .icon-play,
+  .ctrl-play .icon-pause {
+    width: 56px;
+    height: 56px;
+    display: block;
   }
 
   .tracks {
