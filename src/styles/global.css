@@ -40,18 +40,12 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
     background-image:
       radial-gradient(circle 600px at 18% 22%, color-mix(in srgb, var(--page-accent) 8%, transparent), transparent 60%),
       radial-gradient(circle 480px at 82% 68%, color-mix(in srgb, var(--page-accent) 6%, transparent), transparent 60%),
       radial-gradient(circle 360px at 50% 50%, rgba(255, 240, 200, 0.035), transparent 65%);
     background-repeat: no-repeat;
-  }
-
-  /* 正文层级在两层装饰之上 */
-  body > * {
-    position: relative;
-    z-index: 1;
   }
 
   h1,
