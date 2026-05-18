@@ -17,20 +17,8 @@ const gridClass =
 ---
 
 <BaseLayout title="Juniper Jing · Stella Matutina">
-  {/* 调试: 先把蒙层完全拿掉, URL 直接嵌进 CSS (不走 define:vars, 因为它把变量
-     挂到子元素 style 上, body::after 拿不到), 验证星河能否露脸. 如果这版能看到,
-     再加蒙版回来. */}
-  <style is:global set:html={`
-    body::after {
-      background-image: url('${withBase('/textures/starry-sky.png')}') !important;
-      background-size: cover !important;
-      background-position: center !important;
-      background-repeat: no-repeat !important;
-    }
-  `}></style>
-
   {/* Hero · Stella Matutina */}
-  <section class="relative text-center mb-20 md:mb-24 py-16 md:py-24 overflow-hidden">
+  <section class="relative text-center mb-10 md:mb-14 py-16 md:py-24 overflow-hidden">
 
     <h1 class="font-display text-3xl md:text-5xl lg:text-6xl text-junipergold tracking-[0.2em] mb-5 leading-tight">
       STELLA MATUTINA
@@ -47,6 +35,16 @@ const gridClass =
       <span class="h-px bg-goldleaf/40 w-16 md:w-24"></span>
     </div>
   </section>
+
+  {/* Hero ↔ 专辑网格之间的装饰间隔: 十字光环 (SVG 5) */}
+  <div class="flex justify-center mb-12 md:mb-16">
+    <img
+      src={withBase('/brand/divider-cross-halo.svg')}
+      alt=""
+      aria-hidden="true"
+      class="h-44 md:h-56 w-auto opacity-90"
+    />
+  </div>
 
   {/* 专辑网格 · 响应专辑数量自适应列数 */}
   <section class={`grid ${gridClass} gap-6 md:gap-8`}>
