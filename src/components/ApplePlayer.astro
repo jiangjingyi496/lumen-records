@@ -509,7 +509,7 @@ const songData = songs.map((s, i) => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 28px;
+    gap: 16px;
   }
 
   .ctrl {
@@ -533,21 +533,21 @@ const songData = songs.map((s, i) => ({
     filter: brightness(0.9);
   }
 
-  /* prev / next 的 icon 大小 */
+  /* prev / next 的 icon 大小 (~3×) */
   .ctrl-icon {
-    width: 36px;
-    height: 36px;
+    width: 108px;
+    height: 108px;
     display: block;
   }
 
-  /* 中央的播放/暂停按钮的 icon (略大) */
+  /* 中央的播放/暂停按钮的 icon (~3×) */
   .ctrl-play {
     padding: 8px;
   }
   .ctrl-play .icon-play,
   .ctrl-play .icon-pause {
-    width: 56px;
-    height: 56px;
+    width: 168px;
+    height: 168px;
     display: block;
   }
 
