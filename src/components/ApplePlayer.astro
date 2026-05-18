@@ -571,8 +571,8 @@ const songData = songs.map((s, i) => ({
   }
 
   .tracks {
-    /* 由 player-left gap 统一管间距, 这里就不再叠加 margin-top, 避免双层间距 */
-    margin-top: 0;
+    /* 在 player-left gap 之上再多 10px, 让曲目列表跟 controls 之间多一点呼吸 */
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
