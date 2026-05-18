@@ -393,9 +393,9 @@ const songData = songs.map((s, i) => ({
     position: relative;
     z-index: 2;
     display: grid;
-    /* 重做布局: 左列宽度=封面宽度=420, 左列所有元素共享一个基准宽度;
-       右列歌词最多 540, justify-content: center 让整盘居中, 不贴边. */
-    grid-template-columns: 420px minmax(0, 540px);
+    /* 左列 420 → 560 给 1.5× 控件让出位置 (144+216+144 = 504, 加 space-between
+       两端各留 28). 右列 lyric 最大宽度跟着缩到 ~440. */
+    grid-template-columns: 560px minmax(0, 460px);
     justify-content: center;
     gap: 60px;
     padding: 48px;
@@ -522,10 +522,10 @@ const songData = songs.map((s, i) => ({
        (= 容器最大边), 避免 3 个 icon 挤中间的"歪"感. */
     justify-content: space-between;
     gap: 0;
-    /* 144px play 的 SVG halo ≈ 48px per side. -44 折掉 44 留 4px halo,
-       配合 player-left gap=24 → 控件 glyph 距 progress bar ~28px,
-       距 tracks 列表也 ~28px, 上下贴齐. */
-    margin: -44px 0;
+    /* 216px play 的 SVG halo ≈ 72px per side (1.5× 后等比放大).
+       -68 折掉 68 留 4px halo, 跟 player-left gap=24 一起维持
+       glyph 距 progress bar / tracks 列表上下间距不变. */
+    margin: -68px 0;
   }
 
   .ctrl {
@@ -549,14 +549,14 @@ const songData = songs.map((s, i) => ({
     filter: brightness(0.9);
   }
 
-  /* 控件按钮回到放大尺寸 (× 2):
-     - prev/next: 48 → 96px
-     - play/pause: 72 → 144px
-     - 1.5× 内部比例不变. 在 420 左列里 space-between 排布: 两端贴边,
-       中间 144 的 play 居中, 跟 progress bar 边缘对齐. */
+  /* 控件按钮再放大 1.5×:
+     - prev/next: 96 → 144px
+     - play/pause: 144 → 216px
+     - 1.5× 内部比例不变. 在 560 左列里 space-between: 144+216+144 = 504,
+       两端各留 28px, prev 左边缘 / next 右边缘对齐 progress bar 两端. */
   .ctrl-icon {
-    width: 96px;
-    height: 96px;
+    width: 144px;
+    height: 144px;
     display: block;
   }
 
@@ -565,8 +565,8 @@ const songData = songs.map((s, i) => ({
   }
   .ctrl-play .icon-play,
   .ctrl-play .icon-pause {
-    width: 144px;
-    height: 144px;
+    width: 216px;
+    height: 216px;
     display: block;
   }
 
@@ -728,8 +728,8 @@ const songData = songs.map((s, i) => ({
   }
 
   /* === Responsive === */
-  /* 左列回到 420 后, 视口 ≤900 才塌单列 */
-  @media (max-width: 900px) {
+  /* 左列扩到 560 容纳 1.5× 控件后, 视口 ≤1024 提前塌单列 */
+  @media (max-width: 1024px) {
     .player-grid {
       grid-template-columns: 1fr;
       gap: 30px;
@@ -741,20 +741,20 @@ const songData = songs.map((s, i) => ({
     .player-right {
       min-height: 400px;
     }
-    /* 移动端控件跟桌面同步放大 (× 2), justify-content 继承 space-between */
+    /* 移动端控件跟桌面同步放大 1.5× */
     .ctrl-icon {
-      width: 80px;
-      height: 80px;
-    }
-    .ctrl-play .icon-play,
-    .ctrl-play .icon-pause {
       width: 120px;
       height: 120px;
     }
+    .ctrl-play .icon-play,
+    .ctrl-play .icon-pause {
+      width: 180px;
+      height: 180px;
+    }
     .controls {
       gap: 0;
-      /* 120px play 的 halo ≈ 40px per side; -36 折 36, 留 4px halo */
-      margin: -36px 0;
+      /* 180px play 的 halo ≈ 60px per side; -56 折 56, 留 4px halo */
+      margin: -56px 0;
     }
     :global(.player-shell .lyric-line .lyric-en) {
       font-size: 17px;
