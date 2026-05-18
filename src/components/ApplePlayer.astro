@@ -393,9 +393,9 @@ const songData = songs.map((s, i) => ({
     position: relative;
     z-index: 2;
     display: grid;
-    /* 整体重设: 左列 420 (= 封面方形边长, 跟整页 100% 比例协调),
-       右列 lyric ≤ 520, 整盘居中. */
-    grid-template-columns: 420px minmax(0, 520px);
+    /* 左列 420 保持不变 (容纳曲目列表长标题), 右列 lyric 拓宽到 580
+       (420 + 56 + 580 + 96 padding = 1152, 正好顶到 max-w-6xl 上限). */
+    grid-template-columns: 420px minmax(0, 580px);
     justify-content: center;
     gap: 56px;
     padding: 48px;
@@ -410,8 +410,11 @@ const songData = songs.map((s, i) => ({
   }
 
   .cover-wrap {
-    /* 封面 = 左列全宽 = 420×420, 与左列其他模块同宽对齐 */
+    /* 封面缩到 360×360, 在 420 左列里水平居中 (左右各 30px 边距).
+       其他模块 (meta / progress / controls / tracks) 仍按 420 全宽对齐. */
     width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
     aspect-ratio: 1 / 1;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
     border-radius: 6px;
