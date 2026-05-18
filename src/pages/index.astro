@@ -17,8 +17,9 @@ const gridClass =
 ---
 
 <BaseLayout title="Juniper Jing · Stella Matutina">
-  {/* Hero · Stella Matutina */}
-  <section class="relative text-center mb-2 md:mb-3 py-6 md:py-10 overflow-hidden">
+  {/* Hero · Stella Matutina · 整体 100% 比例: hero 占视觉中心,
+     上下用 py-10/16 撑开适中呼吸, 不再 py-6/10 过紧 */}
+  <section class="relative text-center mb-6 md:mb-8 py-10 md:py-16 overflow-hidden">
 
     <h1 class="font-display text-3xl md:text-5xl lg:text-6xl text-junipergold tracking-[0.2em] mb-5 leading-tight">
       STELLA MATUTINA
@@ -29,21 +30,20 @@ const gridClass =
     <p class="text-parchment/75 text-lg md:text-xl font-body italic max-w-2xl mx-auto">
       晨星 · 中世纪游吟诗人、凯尔特民谣、格里高利圣咏 · 个人创作分享
     </p>
-    <div class="flex items-center justify-center gap-4 mt-6">
+    <div class="flex items-center justify-center gap-4 mt-8">
       <span class="h-px bg-goldleaf/40 w-16 md:w-24"></span>
       <span class="text-goldleaf/65 text-sm tracking-[0.3em]">⋆ MUSIC · SACRA ⋆</span>
       <span class="h-px bg-goldleaf/40 w-16 md:w-24"></span>
     </div>
   </section>
 
-  {/* Hero ↔ 专辑网格之间的装饰间隔: 十字光环 (SVG 5)
-     再放大 1.5× → h-24 md:h-[120px] (96/120px) */}
-  <div class="flex justify-center mb-4 md:mb-6">
+  {/* Hero ↔ 专辑网格之间的装饰: 十字光环, 适中尺寸介于 logo 和封面之间 */}
+  <div class="flex justify-center mb-10 md:mb-14">
     <img
       src={withBase('/brand/divider-cross-halo.svg')}
       alt=""
       aria-hidden="true"
-      class="h-24 md:h-[120px] w-auto opacity-90"
+      class="h-20 md:h-24 w-auto opacity-90"
     />
   </div>
 

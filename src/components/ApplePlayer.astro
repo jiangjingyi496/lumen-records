@@ -393,11 +393,11 @@ const songData = songs.map((s, i) => ({
     position: relative;
     z-index: 2;
     display: grid;
-    /* 左列 420 → 560 给 1.5× 控件让出位置 (144+216+144 = 504, 加 space-between
-       两端各留 28). 右列 lyric 最大宽度跟着缩到 ~440. */
-    grid-template-columns: 560px minmax(0, 460px);
+    /* 整体重设: 左列 420 (= 封面方形边长, 跟整页 100% 比例协调),
+       右列 lyric ≤ 520, 整盘居中. */
+    grid-template-columns: 420px minmax(0, 520px);
     justify-content: center;
-    gap: 60px;
+    gap: 56px;
     padding: 48px;
   }
 
@@ -405,14 +405,12 @@ const songData = songs.map((s, i) => ({
   .player-left {
     display: flex;
     flex-direction: column;
-    /* 所有左列模块统一这一个 gap, 不再各处叠 margin-top, 节奏稳定.
-       控件缩小后整列变短, 这里也跟着收一档 28 → 24 */
+    /* 单一 gap 控制 cover/meta/progress/controls/tracks 之间的节奏 */
     gap: 24px;
   }
 
   .cover-wrap {
-    /* 封面 = 左列全宽 = 420×420. 不再 max-width 锁定 + auto 居中(那是上一版
-       左列 640 时为了让封面不被拉大而打的补丁, 现在左列收回 420 就不需要了) */
+    /* 封面 = 左列全宽 = 420×420, 与左列其他模块同宽对齐 */
     width: 100%;
     aspect-ratio: 1 / 1;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -518,14 +516,13 @@ const songData = songs.map((s, i) => ({
   .controls {
     display: flex;
     align-items: center;
-    /* space-between: prev 左边缘 / next 右边缘对齐 progress bar 两端
-       (= 容器最大边), 避免 3 个 icon 挤中间的"歪"感. */
+    /* space-between: prev 左边缘 / next 右边缘对齐 progress bar 两端 */
     justify-content: space-between;
     gap: 0;
-    /* 216px play 的 SVG halo ≈ 72px per side (1.5× 后等比放大).
-       -68 折掉 68 留 4px halo, 跟 player-left gap=24 一起维持
-       glyph 距 progress bar / tracks 列表上下间距不变. */
-    margin: -68px 0;
+    /* 120px play 的 halo ≈ 40px / side, -28 留 12px halo + player-left gap=24
+       → 控件到 progress bar / tracks 上下各 ~36px 视觉间距, 跟横向 70px gap
+       (space-between 自然产生) 配合, 整体节奏不松不紧 */
+    margin: -28px 0;
   }
 
   .ctrl {
@@ -549,14 +546,12 @@ const songData = songs.map((s, i) => ({
     filter: brightness(0.9);
   }
 
-  /* 控件按钮再放大 1.5×:
-     - prev/next: 96 → 144px
-     - play/pause: 144 → 216px
-     - 1.5× 内部比例不变. 在 560 左列里 space-between: 144+216+144 = 504,
-       两端各留 28px, prev 左边缘 / next 右边缘对齐 progress bar 两端. */
+  /* 控件按钮: prev/next 80, play 120 (1.5× 内部比例).
+     space-between 在 420 左列里: 80+120+80 = 280, 两端 0 边距,
+     icon 之间自然留 70px gap, 视觉上不挤. */
   .ctrl-icon {
-    width: 144px;
-    height: 144px;
+    width: 80px;
+    height: 80px;
     display: block;
   }
 
@@ -565,14 +560,14 @@ const songData = songs.map((s, i) => ({
   }
   .ctrl-play .icon-play,
   .ctrl-play .icon-pause {
-    width: 216px;
-    height: 216px;
+    width: 120px;
+    height: 120px;
     display: block;
   }
 
   .tracks {
-    /* 在 player-left gap 之上再多 15px, 控件到曲目列表的间距 = 24 + 15 = 39 */
-    margin-top: 15px;
+    /* 间距由 player-left gap 统一控制, 不叠加额外 margin */
+    margin-top: 0;
     display: flex;
     flex-direction: column;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -728,8 +723,8 @@ const songData = songs.map((s, i) => ({
   }
 
   /* === Responsive === */
-  /* 左列扩到 560 容纳 1.5× 控件后, 视口 ≤1024 提前塌单列 */
-  @media (max-width: 1024px) {
+  /* 左列 420 在 900px 视口以下塌单列 */
+  @media (max-width: 900px) {
     .player-grid {
       grid-template-columns: 1fr;
       gap: 30px;
@@ -741,20 +736,20 @@ const songData = songs.map((s, i) => ({
     .player-right {
       min-height: 400px;
     }
-    /* 移动端控件跟桌面同步放大 1.5× */
+    /* 移动端控件略缩, 适应单列视觉权重 */
     .ctrl-icon {
-      width: 120px;
-      height: 120px;
+      width: 64px;
+      height: 64px;
     }
     .ctrl-play .icon-play,
     .ctrl-play .icon-pause {
-      width: 180px;
-      height: 180px;
+      width: 96px;
+      height: 96px;
     }
     .controls {
       gap: 0;
-      /* 180px play 的 halo ≈ 60px per side; -56 折 56, 留 4px halo */
-      margin: -56px 0;
+      /* 96px play 的 halo ≈ 32px / side; -22 留 10px halo */
+      margin: -22px 0;
     }
     :global(.player-shell .lyric-line .lyric-en) {
       font-size: 17px;
