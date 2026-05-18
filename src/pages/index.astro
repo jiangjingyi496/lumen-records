@@ -17,17 +17,28 @@ const gridClass =
 ---
 
 <BaseLayout title="Juniper Jing · Stella Matutina">
-  {/* 全屏星河背景层 (仅首页) — fixed 跟随视口, 比 body::after 还低一层让两层叠加 */}
-  <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-    <img
-      src={withBase('/textures/starry-sky.png')}
-      alt=""
-      aria-hidden="true"
-      class="absolute inset-0 w-full h-full object-cover opacity-90"
-    />
-    {/* 上下两端做一层柔和 vignette, 让正文和 hero 文字读得清楚, 但不把星河整体压死 */}
-    <div class="absolute inset-0 bg-gradient-to-b from-ink/50 via-ink/15 to-ink/70"></div>
-  </div>
+  {/* 首页专属: 把全局 body::after (本来只是烛光高光) 改成星河 + 蒙版.
+     body::after 本身就是 position:fixed + z:-1, 自带"固定在视口/正文滚动叠在上面"
+     的特性. 之前嵌在 <main> 里那个 -z-10 div 被 body::after 和 body 自身覆盖,
+     星空几乎看不见, 直接换到这里更靠谱. */}
+  <style is:global define:vars={{ starUrl: `url('${withBase('/textures/starry-sky.png')}')` }}>
+    body::after {
+      /* 第一层: 黑色蒙版渐变 (上端略深给 hero 文字底气, 中段最浅让星河露出来,
+         下端再深一点保护后续正文与卡片). 第二层: 星河本体, cover 满铺. */
+      background-image:
+        linear-gradient(
+          180deg,
+          rgba(11, 10, 8, 0.62) 0%,
+          rgba(11, 10, 8, 0.40) 28%,
+          rgba(11, 10, 8, 0.40) 72%,
+          rgba(11, 10, 8, 0.72) 100%
+        ),
+        var(--starUrl) !important;
+      background-size: 100% 100%, cover !important;
+      background-position: center, center !important;
+      background-repeat: no-repeat, no-repeat !important;
+    }
+  </style>
 
   {/* Hero · Stella Matutina */}
   <section class="relative text-center mb-20 md:mb-24 py-16 md:py-24 overflow-hidden">

@@ -407,7 +407,11 @@ const songData = songs.map((s, i) => ({
   }
 
   .cover-wrap {
+    /* 锁回原始 380px, 不跟左列一起放大. 左列 640 是给控件按钮留的, 封面单独在
+       这一格里水平居中 */
     width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
     aspect-ratio: 1 / 1;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
     border-radius: 6px;
