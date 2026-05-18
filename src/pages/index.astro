@@ -18,7 +18,7 @@ const gridClass =
 
 <BaseLayout title="Juniper Jing · Stella Matutina">
   {/* Hero · Stella Matutina */}
-  <section class="relative text-center mb-4 md:mb-6 py-6 md:py-10 overflow-hidden">
+  <section class="relative text-center mb-2 md:mb-3 py-6 md:py-10 overflow-hidden">
 
     <h1 class="font-display text-3xl md:text-5xl lg:text-6xl text-junipergold tracking-[0.2em] mb-5 leading-tight">
       STELLA MATUTINA
@@ -36,13 +36,14 @@ const gridClass =
     </div>
   </section>
 
-  {/* Hero ↔ 专辑网格之间的装饰间隔: 十字光环 (SVG 5) */}
-  <div class="flex justify-center mb-8 md:mb-12">
+  {/* Hero ↔ 专辑网格之间的装饰间隔: 十字光环 (SVG 5)
+     尺寸调小一倍 (h-44/56 → h-24/28), 上下边距同步收窄 */}
+  <div class="flex justify-center mb-4 md:mb-6">
     <img
       src={withBase('/brand/divider-cross-halo.svg')}
       alt=""
       aria-hidden="true"
-      class="h-44 md:h-56 w-auto opacity-90"
+      class="h-24 md:h-28 w-auto opacity-90"
     />
   </div>
 

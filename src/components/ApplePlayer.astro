@@ -518,15 +518,14 @@ const songData = songs.map((s, i) => ({
   .controls {
     display: flex;
     align-items: center;
-    /* 改 space-between: 让 prev 左边缘 / next 右边缘对齐到 progress bar
-       (= 容器最大边). 之前 center+gap 把 3 个 icon 挤在中间, progress bar
-       两侧的时间标签 0:00 / 3:19 跑到极远处, 看起来"歪". */
+    /* space-between: prev 左边缘 / next 右边缘对齐 progress bar 两端
+       (= 容器最大边), 避免 3 个 icon 挤中间的"歪"感. */
     justify-content: space-between;
     gap: 0;
-    /* 72px play 的 SVG halo ≈ 24px per side. 用 -22 折掉 22, 留 2px halo,
-       配合 player-left gap=24 → 控件 glyph 距 progress bar 仅 ~26px,
-       距 tracks 列表也 ~26px, 跟横向 0 vs 0 边距对齐. */
-    margin: -22px 0;
+    /* 144px play 的 SVG halo ≈ 48px per side. -44 折掉 44 留 4px halo,
+       配合 player-left gap=24 → 控件 glyph 距 progress bar ~28px,
+       距 tracks 列表也 ~28px, 上下贴齐. */
+    margin: -44px 0;
   }
 
   .ctrl {
@@ -550,14 +549,14 @@ const songData = songs.map((s, i) => ({
     filter: brightness(0.9);
   }
 
-  /* 控件按钮整体缩小一倍 (halve):
-     - prev/next: 96 → 48px
-     - play/pause: 144 → 72px
-     - 1.5× 比例不变, 在 420 左列里横排: 48+14+72+14+48 = 196, 居中留充足边距
-     - 视觉 glyph 约 prev/next 16px, play 24px, 比例同样 1.5× */
+  /* 控件按钮回到放大尺寸 (× 2):
+     - prev/next: 48 → 96px
+     - play/pause: 72 → 144px
+     - 1.5× 内部比例不变. 在 420 左列里 space-between 排布: 两端贴边,
+       中间 144 的 play 居中, 跟 progress bar 边缘对齐. */
   .ctrl-icon {
-    width: 48px;
-    height: 48px;
+    width: 96px;
+    height: 96px;
     display: block;
   }
 
@@ -566,8 +565,8 @@ const songData = songs.map((s, i) => ({
   }
   .ctrl-play .icon-play,
   .ctrl-play .icon-pause {
-    width: 72px;
-    height: 72px;
+    width: 144px;
+    height: 144px;
     display: block;
   }
 
@@ -742,20 +741,20 @@ const songData = songs.map((s, i) => ({
     .player-right {
       min-height: 400px;
     }
-    /* 移动端控件跟桌面同步缩小一倍, justify-content 继承 space-between */
+    /* 移动端控件跟桌面同步放大 (× 2), justify-content 继承 space-between */
     .ctrl-icon {
-      width: 40px;
-      height: 40px;
+      width: 80px;
+      height: 80px;
     }
     .ctrl-play .icon-play,
     .ctrl-play .icon-pause {
-      width: 60px;
-      height: 60px;
+      width: 120px;
+      height: 120px;
     }
     .controls {
       gap: 0;
-      /* 60px play 的 halo ≈ 20px per side; -18 折 18, 留 2px halo */
-      margin: -18px 0;
+      /* 120px play 的 halo ≈ 40px per side; -36 折 36, 留 4px halo */
+      margin: -36px 0;
     }
     :global(.player-shell .lyric-line .lyric-en) {
       font-size: 17px;
