@@ -29,13 +29,13 @@ const { title, description = 'Juniper Jing · Stella Matutina · Medieval Trouba
   <body class="min-h-screen flex flex-col">
     <header class="border-b border-goldleaf/20 backdrop-blur-md sticky top-0 z-20 bg-ink/30">
       <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href={withBase('/')} class="flex items-center" aria-label="Juniper Jing 首页">
+        <div class="flex items-center" aria-label="Juniper Jing">
           <img
             src={withBase('/brand/logo-horizontal.svg')}
             alt="Juniper Jing"
             class="h-12 md:h-14 w-auto"
           />
-        </a>
+        </div>
         <ul class="flex gap-7 md:gap-12 text-sm md:text-base tracking-[0.2em] uppercase font-display text-goldleaf">
           <li><a href={withBase('/')} class="hover:text-junipergold transition-colors">Music</a></li>
           <li><a href={withBase('/tune/')} class="hover:text-junipergold transition-colors">Tune</a></li>
