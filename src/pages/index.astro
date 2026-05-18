@@ -18,8 +18,8 @@ const gridClass =
 
 <BaseLayout title="Juniper Jing · Stella Matutina">
   {/* Hero · Stella Matutina · 整体 100% 比例: hero 占视觉中心,
-     上下用 py-10/16 撑开适中呼吸, 不再 py-6/10 过紧 */}
-  <section class="relative text-center mb-6 md:mb-8 py-10 md:py-16 overflow-hidden">
+     上下用 py-10/16 撑开适中呼吸. 底部 mb 收 10/12px 拉近跟十字光环的距离. */}
+  <section class="relative text-center mb-3.5 md:mb-5 py-10 md:py-16 overflow-hidden">
 
     <h1 class="font-display text-3xl md:text-5xl lg:text-6xl text-junipergold tracking-[0.2em] mb-5 leading-tight">
       STELLA MATUTINA
@@ -37,13 +37,13 @@ const gridClass =
     </div>
   </section>
 
-  {/* Hero ↔ 专辑网格之间的装饰: 十字光环, 适中尺寸介于 logo 和封面之间 */}
+  {/* Hero ↔ 专辑网格之间的装饰: 十字光环, ×1.5 放大让它显眼一点 */}
   <div class="flex justify-center mb-10 md:mb-14">
     <img
       src={withBase('/brand/divider-cross-halo.svg')}
       alt=""
       aria-hidden="true"
-      class="h-20 md:h-24 w-auto opacity-90"
+      class="h-[120px] md:h-[144px] w-auto opacity-90"
     />
   </div>
 
